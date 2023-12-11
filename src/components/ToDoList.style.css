@@ -1,0 +1,9 @@
+.ul-box{
+    display: flex;
+    flex-wrap: wrap;
+    width: 125px;
+}
+
+.ul-box__button{
+    margin-left: 10px;
+}

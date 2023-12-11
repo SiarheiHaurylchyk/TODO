@@ -1,18 +1,14 @@
 import React from 'react';
+import {ChoseType} from "../App";
 
 type ButtonType ={
     text:string
-    changeFilter?:Function
+    changeFilter?:(value:ChoseType)=>void
 }
 function Button(props:ButtonType) {
     return (
         <button onClick={()=> {
-            if (!props.changeFilter) return
-            props.changeFilter(props.text.toLowerCase())
-            // if (props.changeFilter) {
-            //     props.changeFilter(props.text.toLowerCase())
-            // }
-            // props.changeFilter?.(props.text.toLowerCase())
+            props.changeFilter?.(props.text.toLowerCase()==="completed"? "completed" : props.text.toLowerCase()==="active"? "active": "all")
         }}>
             {props.text}
         </button>

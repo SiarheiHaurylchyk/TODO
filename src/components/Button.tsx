@@ -1,17 +1,20 @@
-import React from 'react';
-import {ChoseType} from "../App";
+import React,{MouseEvent} from 'react';
 
-type ButtonType ={
-    text:string
-    changeFilter?:(value:ChoseType)=>void
+
+type ButtonType = {
+    onClick?: () => void,
+    isDisabled?: boolean,
+    children?: string,
+    isActive?: boolean,
+    activeClass?: string
 }
-function Button(props:ButtonType) {
+
+function Button({onClick, isDisabled,  children,isActive, activeClass}: ButtonType) {
+
     return (
-        <button onClick={()=> {
-            props.changeFilter?.(props.text.toLowerCase()==="completed"? "completed" : props.text.toLowerCase()==="active"? "active": "all")
-        }}>
-            {props.text}
-        </button>
+        <button disabled={isDisabled}
+                className={isActive? activeClass : ""}
+                onClick={onClick}>{children}</button>
     );
 }
 

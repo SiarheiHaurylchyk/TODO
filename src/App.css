@@ -13,3 +13,17 @@
   background-color: antiquewhite;
   padding: 15px;
 }
+
+.error {
+  border: 2px solid red;
+  outline: red;
+}
+
+.active{
+  border: 2px solid royalblue;
+}
+
+.isDone{
+  opacity: 70%;
+  text-decoration: line-through;
+}

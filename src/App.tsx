@@ -45,7 +45,7 @@ function App() {
 
     function changeTaskStatus (taskId:string, isDone:boolean){
         let myTask: Array<TaskType> = tasks.map(val=>{
-         return   val.id===taskId ? {...val,  isDone}  : val ;
+         return   val.id===taskId ? {...val,  isDone:isDone}  : val ;
         })
         setTask(myTask)
     }

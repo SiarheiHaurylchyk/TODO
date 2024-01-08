@@ -3,6 +3,7 @@ import './App.css';
 import ToDoList, {TaskType} from "./components/ToDoList";
 import {v1} from "uuid";
 import {AddItemForm} from "./components/AddItemForm";
+import toDoList from "./components/ToDoList";
 
 export type ChoseType = "all" | "completed" | "active";
 
@@ -12,6 +13,10 @@ type TodoListType = {
     filter: ChoseType
 }
 
+type TaskStateType = {
+    [key:string]: Array<TaskType>
+}
+
 function App() {
 
     let todoListId1 = v1();
@@ -19,10 +24,10 @@ function App() {
 
     let [todoLists, setTodoList] = useState<Array<TodoListType>>([
         {id: todoListId1, title: "What to learn", filter: "all"},
-        {id: todoListId2, title: "What to buy", filter: "all"}
+        {id: todoListId2, title: "What to buy", filter: "all"},
     ])
 
-    let [tasksObj, setTasksObj] = useState({
+    let [tasksObj, setTasksObj] = useState<TaskStateType>({
         [todoListId1]: [
             {id: v1(), title: "HTML", isDone: true},
             {id: v1(), title: "CSS", isDone: true},
@@ -39,8 +44,8 @@ function App() {
     }
 
     function addTask(text: string,todoListId:string) {
-        let task = {id: v1(), title: text.trim(), isDone: true};
-        setTasksObj({...tasksObj,[todoListId]:[...tasksObj[todoListId],task]})
+        let task = {id: v1(), title: text.trim(), isDone: false};
+        setTasksObj({...tasksObj,[todoListId]:[task,...tasksObj[todoListId]]})
     }
 
 
@@ -49,7 +54,7 @@ function App() {
     }
 
     function changeTaskStatus(taskId: string, isDone: boolean,todoListId:string) {
-       setTasksObj({...tasksObj, [todoListId]:tasksObj[todoListId].map(e=>e.id==taskId?{...e,isDone}:e)})
+       setTasksObj({...tasksObj, [todoListId]:tasksObj[todoListId].map(e=>e.id===taskId ? {...e,isDone} : e )})
     }
 
 
@@ -61,10 +66,16 @@ function App() {
         setTasksObj(tasksObj);
     }
 
+    function addTodoList(text:string){
+        let todo:TodoListType= {id:v1(),title:text,filter:"all"};
+        setTodoList([todo,...todoLists]);
+        setTasksObj({...tasksObj, [todo.id]:[]})
+    }
+
     return (
 
         <div className="App">
-            <AddItemForm addItem={()=>{}} todoListId={'23'}/>
+            <AddItemForm addItem={addTodoList} />
             {
                 todoLists.map(e => {
 

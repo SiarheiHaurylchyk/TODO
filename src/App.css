@@ -8,9 +8,9 @@
 }
 
 .toDoList{
-  border: 1px solid black;
+  border: 1px solid white;
   border-radius: 5px;
-  background-color: antiquewhite;
+  background-color: rgba(255, 255, 255, 0.7);
   padding: 15px;
 }
 

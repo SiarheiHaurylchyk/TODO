@@ -3,6 +3,7 @@ import Button from "./Button";
 import "./ToDoList.style.css"
 import {ChoseType} from "../App";
 import {AddItemForm} from "./AddItemForm";
+import {EditableSpan} from "./EditableSpan";
 
 
 export type TaskType = {
@@ -37,7 +38,7 @@ const ToDoList = ({tasks, NameToDO, removeTask, changeFilter,addTask,filter,chan
         return (
             <li key={el.id} className={el.isDone?"isDone":""}>
                 <input type="checkbox" onChange={(e)=>onCheckHandler(el.id,e,todoListId)} checked={el.isDone}/>
-                <span>{el.title}</span>
+                <EditableSpan title={el.title}/>
                 <button className="ul-box__button" onClick={() => {
                     removeTask(el.id,todoListId)
                 }}>X
@@ -49,12 +50,17 @@ const ToDoList = ({tasks, NameToDO, removeTask, changeFilter,addTask,filter,chan
         removeTodoList(todoListIdRemove);
     }
 
+    function addTasks(title:string){
+        addTask(title,todoListId)
+    }
+
     return (
         <>
             <div className="toDoList">
                 <div>
-                    <h3 style={{textAlign:"center"}}>{NameToDO} <button onClick={()=>removeTodo(todoListId)}>remove</button></h3>
-                    <AddItemForm  addItem={addTask} todoListId={todoListId}/>
+                    <h3 className={"h3-todo"}>{NameToDO} <button onClick={()=>removeTodo(todoListId)}>remove</button>
+                    </h3>
+                    <AddItemForm  addItem={addTasks}/>
                     <ul className="ul-box">
                         {listItems.length!==0?listItems:<li>Нет тасок</li>}
                     </ul>

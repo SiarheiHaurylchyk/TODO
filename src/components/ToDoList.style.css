@@ -7,3 +7,7 @@
 .ul-box__button{
     margin-left: 10px;
 }
+.h3-todo{
+    display: flex;
+    justify-content: space-around;
+}

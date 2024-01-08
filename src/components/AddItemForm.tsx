@@ -1,18 +1,19 @@
 import React, {ChangeEvent, useState} from "react";
 import Button from "./Button";
 
+
 type addItemFromPropsType = {
-    addItem: (text: string, todoListId: string) => void,
-    todoListId: string,
+    addItem: (text: string) => void,
+
 }
-export const AddItemForm: React.FC<addItemFromPropsType> = ({addItem, todoListId}) => {
+export const AddItemForm: React.FC<addItemFromPropsType> = ({addItem}) => {
     const [newTask, setNewTask] = useState("");
     const [error, setError] = useState(false);
     let isAddTaskButtonDisabled = !newTask.trim();
 
     function addNewTask(newTask: string) {
         if (newTask.trim() !== "") {
-            addItem(newTask, todoListId);
+            addItem(newTask);
             setNewTask("");
         } else {
             setError(true);

@@ -1,5 +1,4 @@
-import React,{MouseEvent} from 'react';
-
+import React from 'react';
 
 type ButtonType = {
     onClick?: () => void,

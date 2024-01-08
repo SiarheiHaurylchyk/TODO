@@ -9,11 +9,11 @@ type ButtonType = {
     activeClass?: string
 }
 
-function Button({onClick, isDisabled,  children,isActive, activeClass}: ButtonType) {
+function Button({onClick, isDisabled,  children,isActive}: ButtonType) {
 
     return (
         <button disabled={isDisabled}
-                className={isActive? activeClass : ""}
+                className={isActive? "active" : ""}
                 onClick={onClick}>{children}</button>
     );
 }

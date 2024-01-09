@@ -1,7 +1,7 @@
 .ul-box{
     display: flex;
     flex-wrap: wrap;
-    width: 125px;
+    flex-direction: column;
 }
 
 .ul-box__button{

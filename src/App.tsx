@@ -3,7 +3,6 @@ import './App.css';
 import ToDoList, {TaskType} from "./components/ToDoList";
 import {v1} from "uuid";
 import {AddItemForm} from "./components/AddItemForm";
-import toDoList from "./components/ToDoList";
 
 export type ChoseType = "all" | "completed" | "active";
 
@@ -58,7 +57,6 @@ function App() {
     }
 
 
-
     function removeTodoList(todoListId:string){
         let dellTodo = todoLists.filter(e=>e.id!==todoListId);
         setTodoList(dellTodo)
@@ -70,6 +68,14 @@ function App() {
         let todo:TodoListType= {id:v1(),title:text,filter:"all"};
         setTodoList([todo,...todoLists]);
         setTasksObj({...tasksObj, [todo.id]:[]})
+    }
+
+    function updateTasksObj(todoListId:string,id:string,title:string){
+        setTasksObj({...tasksObj,[todoListId]:tasksObj[todoListId].map(el=>el.id===id?{...el,title}:el)})
+    }
+
+    function updateTodoLists(todoListId:string,title:string){
+        setTodoList(todoLists.map(el=>el.id===todoListId?{...el,title}:el))
     }
 
     return (
@@ -97,6 +103,8 @@ function App() {
                                      todoListId={e.id}
                                      key={e.id}
                                      removeTodoList={removeTodoList}
+                                     updateTasksObj={updateTasksObj}
+                                     updateTodoLists={updateTodoLists}
                     />
                 })
             }

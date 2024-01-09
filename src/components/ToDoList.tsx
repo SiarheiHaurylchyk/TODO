@@ -21,13 +21,13 @@ type ToDoListType = {
     changeTaskStatus:(taskId:string, isDone:boolean, todoListId:string)=>void,
     filter:ChoseType,
     todoListId:string,
-    removeTodoList:(todoListId:string)=>void;
+    removeTodoList:(todoListId:string)=>void,
+    updateTasksObj:(todoListId:string,id:string,text:string)=>void,
+    updateTodoLists:(todoListId:string,title:string)=>void
 }
 
 
-const ToDoList = ({tasks, NameToDO, removeTask, changeFilter,addTask,filter,changeTaskStatus,todoListId,removeTodoList}: ToDoListType) => {
-
-
+const ToDoList = ({tasks, NameToDO, removeTask, changeFilter,addTask,filter,changeTaskStatus,todoListId,removeTodoList,updateTasksObj,updateTodoLists}: ToDoListType) => {
 
 
     function onCheckHandler (id:string,e:ChangeEvent<HTMLInputElement>,tasksId:string){
@@ -35,10 +35,13 @@ const ToDoList = ({tasks, NameToDO, removeTask, changeFilter,addTask,filter,chan
     }
 
     const listItems: Array<JSX.Element> = tasks.map(el=>{
+        function updateTasksObjHandler(text:string){
+            updateTasksObj(todoListId,el.id,text)
+        }
         return (
             <li key={el.id} className={el.isDone?"isDone":""}>
                 <input type="checkbox" onChange={(e)=>onCheckHandler(el.id,e,todoListId)} checked={el.isDone}/>
-                <EditableSpan title={el.title}/>
+                <EditableSpan oldTitle={el.title} updateTasksObjHandler={updateTasksObjHandler}/>
                 <button className="ul-box__button" onClick={() => {
                     removeTask(el.id,todoListId)
                 }}>X
@@ -54,11 +57,17 @@ const ToDoList = ({tasks, NameToDO, removeTask, changeFilter,addTask,filter,chan
         addTask(title,todoListId)
     }
 
+    function updateTodoListsHandler(title:string){
+        updateTodoLists(todoListId,title);
+    }
+
     return (
         <>
             <div className="toDoList">
                 <div>
-                    <h3 className={"h3-todo"}>{NameToDO} <button onClick={()=>removeTodo(todoListId)}>remove</button>
+                    <h3 className={"h3-todo"}>
+                        <EditableSpan oldTitle={NameToDO} updateTasksObjHandler={updateTodoListsHandler}/>
+                        <button onClick={()=>removeTodo(todoListId)}>remove</button>
                     </h3>
                     <AddItemForm  addItem={addTasks}/>
                     <ul className="ul-box">

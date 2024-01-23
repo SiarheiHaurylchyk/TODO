@@ -1,9 +1,11 @@
 import React, {ChangeEvent} from 'react';
-import Button from "./Button";
+import MyButton from "./MyButton";
 import "./ToDoList.style.css"
 import {ChoseType} from "../App";
 import {AddItemForm} from "./AddItemForm";
 import {EditableSpan} from "./EditableSpan";
+import {Delete} from "@mui/icons-material";
+import {Checkbox, IconButton} from "@mui/material";
 
 
 export type TaskType = {
@@ -40,12 +42,13 @@ const ToDoList = ({tasks, NameToDO, removeTask, changeFilter,addTask,filter,chan
         }
         return (
             <li key={el.id} className={el.isDone?"isDone":""}>
-                <input type="checkbox" onChange={(e)=>onCheckHandler(el.id,e,todoListId)} checked={el.isDone}/>
+                <Checkbox onChange={(e)=>onCheckHandler(el.id,e,todoListId)} checked={el.isDone}/>
                 <EditableSpan oldTitle={el.title} updateTasksObjHandler={updateTasksObjHandler}/>
-                <button className="ul-box__button" onClick={() => {
-                    removeTask(el.id,todoListId)
-                }}>X
-                </button>
+                <IconButton>
+                    <Delete onClick={() => {
+                        removeTask(el.id,todoListId)
+                    }} />
+                </IconButton>
             </li>
         )
     })
@@ -64,21 +67,26 @@ const ToDoList = ({tasks, NameToDO, removeTask, changeFilter,addTask,filter,chan
     return (
         <>
             <div className="toDoList">
-                <div>
-                    <h3 className={"h3-todo"}>
+
+                    <h3>
+                        <div className={"h3-todo"}>
                         <EditableSpan oldTitle={NameToDO} updateTasksObjHandler={updateTodoListsHandler}/>
-                        <button onClick={()=>removeTodo(todoListId)}>remove</button>
+
+                        <IconButton>
+                            <Delete color={"primary"} onClick={()=>removeTodo(todoListId)} />
+                        </IconButton>
+                        </div>
                     </h3>
                     <AddItemForm  addItem={addTasks}/>
                     <ul className="ul-box">
                         {listItems.length!==0?listItems:<li>Нет тасок</li>}
                     </ul>
                     <div>
-                        <Button isActive={filter==="all"} onClick={()=>changeFilter("all",todoListId)}>All</Button>
-                        <Button isActive={filter==="active"} onClick={()=>changeFilter("active",todoListId)}>Active</Button>
-                        <Button isActive={filter==="completed"} onClick={()=>changeFilter("completed",todoListId)}>Completed</Button>
+                        <MyButton isActive={filter==="all"} onClick={()=>changeFilter("all",todoListId)}>All</MyButton>
+                        <MyButton isActive={filter==="active"} onClick={()=>changeFilter("active",todoListId)}>Active</MyButton>
+                        <MyButton isActive={filter==="completed"} onClick={()=>changeFilter("completed",todoListId)}>Completed</MyButton>
                     </div>
-                </div>
+
             </div>
         </>
     );

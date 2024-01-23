@@ -2,6 +2,7 @@
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
+
 }
 
 .ul-box__button{
@@ -10,4 +11,5 @@
 .h3-todo{
     display: flex;
     justify-content: space-around;
+    align-items: center;
 }

@@ -1,5 +1,6 @@
 import React, {ChangeEvent, useState} from "react";
-import Button from "./Button";
+import MyButton from "./MyButton";
+import {Button, TextField} from "@mui/material";
 
 
 type addItemFromPropsType = {
@@ -33,10 +34,18 @@ export const AddItemForm: React.FC<addItemFromPropsType> = ({addItem}) => {
     }
 
     return (
-        <div>
-            <input onChange={onChangeHandler} value={newTask} onKeyDown={handlePress} className={error ? "error" : ""}/>
-            <Button isDisabled={isAddTaskButtonDisabled} onClick={() => addNewTask(newTask)}>+</Button>
-            {error && <div style={{color: "red"}}>Error: Title is required</div>}
-        </div>
+        <>
+            <TextField label={error?"Error!!!":"Enter Text"}
+                       variant={"outlined"}
+                       size={"small"}
+                       helperText={error}
+                       error={error}
+                       onChange={onChangeHandler}
+                       value={newTask}
+                       onKeyDown={handlePress}
+            />
+            <Button disabled={isAddTaskButtonDisabled} variant={"contained"} sx={{minHeight:"40px"}} onClick={() => addNewTask(newTask)}>+</Button>
+
+        </>
     )
 }

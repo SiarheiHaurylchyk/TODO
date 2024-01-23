@@ -1,4 +1,5 @@
 import React, {ChangeEvent, useState} from "react";
+import {Input} from "@mui/material";
 
 type EditableSpanProps = {
     oldTitle: string,
@@ -19,6 +20,6 @@ export function EditableSpan(props: EditableSpanProps) {
         setTitle( e.currentTarget.value)
     }
     return changeInputOrSpan?
-        <input onChange={onChange} value={title} onBlur={onBlur} autoFocus/> :
+        <Input onChange={onChange} value={title} onBlur={onBlur} autoFocus/> :
         <span onDoubleClick={onDoubleClick}>{props.oldTitle}</span>
 }

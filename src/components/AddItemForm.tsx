@@ -10,6 +10,9 @@ type addItemFromPropsType = {
 export const AddItemForm: React.FC<addItemFromPropsType> = ({addItem}) => {
     const [newTask, setNewTask] = useState("");
     const [error, setError] = useState(false);
+
+
+
     let isAddTaskButtonDisabled = !newTask.trim();
 
     function addNewTask(newTask: string) {

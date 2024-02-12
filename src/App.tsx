@@ -49,33 +49,36 @@ function App() {
         let task = {id: v1(), title: text.trim(), isDone: false};
         setTasksObj({...tasksObj, [todoListId]: [task, ...tasksObj[todoListId]]})
     }
+    function changeTaskStatus(taskId: string, isDone: boolean, todoListId: string) {
+        setTasksObj({...tasksObj, [todoListId]: tasksObj[todoListId].map(e => e.id === taskId ? {...e, isDone} : e)})
+    }
+
+    function updateTasksObj(todoListId: string, id: string, title: string) {
+        setTasksObj({...tasksObj, [todoListId]: tasksObj[todoListId].map(el => el.id === id ? {...el, title} : el)})
+    }
+
 
 
     function changeFilter(filter: ChoseType, todoListId: string) {
         setTodoList(todoLists.map(e => e.id === todoListId ? {...e, filter} : e));
     }
 
-    function changeTaskStatus(taskId: string, isDone: boolean, todoListId: string) {
-        setTasksObj({...tasksObj, [todoListId]: tasksObj[todoListId].map(e => e.id === taskId ? {...e, isDone} : e)})
-    }
-
 
     function removeTodoList(todoListId: string) {
         let dellTodo = todoLists.filter(e => e.id !== todoListId);
         setTodoList(dellTodo)
-        delete tasksObj[todoListId];
-        setTasksObj(tasksObj);
+
+        // delete tasksObj[todoListId];
+        // setTasksObj(tasksObj);
     }
 
     function addTodoList(text: string) {
-        let todo: TodoListType = {id: v1(), title: text, filter: "all"};
-        setTodoList([todo, ...todoLists]);
-        setTasksObj({...tasksObj, [todo.id]: []})
+        const myId = v1();
+        // let todo: TodoListType = {id: myId, title: text, filter: "all"};
+        // setTodoList([todo, ...todoLists]);
+        // setTasksObj({...tasksObj, [todo.id]: []})
     }
 
-    function updateTasksObj(todoListId: string, id: string, title: string) {
-        setTasksObj({...tasksObj, [todoListId]: tasksObj[todoListId].map(el => el.id === id ? {...el, title} : el)})
-    }
 
     function updateTodoLists(todoListId: string, title: string) {
         setTodoList(todoLists.map(el => el.id === todoListId ? {...el, title} : el))

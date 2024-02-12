@@ -1,11 +1,10 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import './App.css';
 import ToDoList, {TaskType} from "./components/ToDoList";
 import {v1} from "uuid";
 import {AddItemForm} from "./components/AddItemForm";
 import ButtonAppBar from "./components/ButtonAppBar";
-import {Button, Container, Grid, Paper} from "@mui/material";
-import {DemoPageMUI} from "./components/ChangeButtonMUI";
+import {Container, Grid, Paper} from "@mui/material";
 
 export type ChoseType = "all" | "completed" | "active";
 
@@ -15,7 +14,7 @@ export type TodoListType = {
     filter: ChoseType
 }
 
-type TaskStateType = {
+export type TaskStateType = {
     [key: string]: Array<TaskType>
 }
 

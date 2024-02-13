@@ -6,7 +6,7 @@ type addItemFromPropsType = {
     addItem: (text: string) => void,
 
 }
-export const AddItemForm: React.FC<addItemFromPropsType> = React.memo(({addItem}) => {
+export const AddItemForm = React.memo(({addItem}:addItemFromPropsType) => {
     console.log("AddItemForm")
 
     const [newTask, setNewTask] = useState("");
@@ -16,7 +16,7 @@ export const AddItemForm: React.FC<addItemFromPropsType> = React.memo(({addItem}
 
     let isAddTaskButtonDisabled = !newTask.trim();
 
-    function addNewTask(newTask: string) {
+    const addNewTask=(newTask: string)=> {
         if (newTask.trim() !== "") {
             addItem(newTask);
             setNewTask("");

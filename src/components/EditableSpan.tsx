@@ -6,13 +6,13 @@ type EditableSpanProps = {
     updateTasksHandler:(title:string)=>void,
 }
 
-export function EditableSpan(props: EditableSpanProps) {
+export const EditableSpan = React.memo((props: EditableSpanProps)=> {
     const [changeInputOrSpan, setChangeInputOrSpan] = useState(false);
     const [title,setTitle] = useState(props.oldTitle)
     function onDoubleClick() {
         setChangeInputOrSpan(!changeInputOrSpan);
     }
-    function onBlur() {
+    const onBlur=()=> {
         if(changeInputOrSpan)props.updateTasksHandler(title);
         setChangeInputOrSpan(false);
     }
@@ -22,4 +22,4 @@ export function EditableSpan(props: EditableSpanProps) {
     return changeInputOrSpan?
         <Input onChange={onChange} value={title} onBlur={onBlur} autoFocus/> :
         <span onDoubleClick={onDoubleClick}>{props.oldTitle}</span>
-}
+})

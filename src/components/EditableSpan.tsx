@@ -3,7 +3,7 @@ import {Input} from "@mui/material";
 
 type EditableSpanProps = {
     oldTitle: string,
-    updateTasksObjHandler:(title:string)=>void,
+    updateTasksHandler:(title:string)=>void,
 }
 
 export function EditableSpan(props: EditableSpanProps) {
@@ -13,7 +13,7 @@ export function EditableSpan(props: EditableSpanProps) {
         setChangeInputOrSpan(!changeInputOrSpan);
     }
     function onBlur() {
-        if(changeInputOrSpan)props.updateTasksObjHandler(title);
+        if(changeInputOrSpan)props.updateTasksHandler(title);
         setChangeInputOrSpan(false);
     }
     function onChange(e:ChangeEvent<HTMLInputElement>){

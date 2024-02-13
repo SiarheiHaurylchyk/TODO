@@ -13,6 +13,8 @@ const initTasksState: TaskStateType = {
         {id: v1(), title: "CSS", isDone: false},
     ]
 }
+
+
 export const TaskReducer=(state:TaskStateType = initTasksState,action:actionTaskType): TaskStateType=>{
     switch (action.type) {
         case "REMOVE-TASK":{

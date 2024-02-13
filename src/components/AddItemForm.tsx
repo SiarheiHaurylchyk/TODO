@@ -1,5 +1,4 @@
 import React, {ChangeEvent, useState} from "react";
-import MyButton from "./MyButton";
 import {Button, TextField} from "@mui/material";
 
 
@@ -7,7 +6,9 @@ type addItemFromPropsType = {
     addItem: (text: string) => void,
 
 }
-export const AddItemForm: React.FC<addItemFromPropsType> = ({addItem}) => {
+export const AddItemForm: React.FC<addItemFromPropsType> = React.memo(({addItem}) => {
+    console.log("AddItemForm")
+
     const [newTask, setNewTask] = useState("");
     const [error, setError] = useState(false);
 
@@ -51,4 +52,4 @@ export const AddItemForm: React.FC<addItemFromPropsType> = ({addItem}) => {
 
         </>
     )
-}
+})

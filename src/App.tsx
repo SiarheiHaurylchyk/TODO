@@ -1,10 +1,14 @@
-import React, {useState} from 'react';
+import React from 'react';
 import './App.css';
 import ToDoList, {TaskType} from "./components/ToDoList";
 import {v1} from "uuid";
 import {AddItemForm} from "./components/AddItemForm";
 import ButtonAppBar from "./components/ButtonAppBar";
 import {Container, Grid, Paper} from "@mui/material";
+import {useDispatch, useSelector} from "react-redux";
+import {RootReducerType} from "./store/store";
+import {addTaskAc, changeTaskStatusAc, removeTaskAc, updateTasksAc} from "./state/TaskReducer";
+import {addTodoListAc, changeFilterAC, removeTodoListAc, updateTodoListsAc} from "./state/TodoListReducer";
 
 export type ChoseType = "all" | "completed" | "active";
 
@@ -19,54 +23,28 @@ export type TaskStateType = {
 }
 
 function App() {
+    console.log("APP")
+    const dispatch = useDispatch()
+    const todoLists = useSelector<RootReducerType, Array<TodoListType>>(state=>state.TodoListReducer)
+    const tasksObj = useSelector<RootReducerType, TaskStateType>(state=>state.TaskReducer)
 
-    let todoListId1 = v1();
-    let todoListId2 = v1();
 
-    let [todoLists, setTodoList] = useState<Array<TodoListType>>([
-        {id: todoListId1, title: "What to learn", filter: "all"},
-        {id: todoListId2, title: "What to buy", filter: "all"},
-    ])
-
-    let [tasksObj, setTasksObj] = useState<TaskStateType>({
-        [todoListId1]: [
-            {id: v1(), title: "HTML", isDone: true},
-            {id: v1(), title: "CSS", isDone: true},
-            {id: v1(), title: "ES6/TS", isDone: false},
-        ],
-        [todoListId2]: [
-            {id: v1(), title: "HTML", isDone: true},
-            {id: v1(), title: "CSS", isDone: false},
-        ]
-    })
-
-    function removeTask(id: string, todoListId: string) {
-        setTasksObj({...tasksObj, [todoListId]: tasksObj[todoListId].filter(e => e.id !== id)});
-    }
-
-    function addTask(text: string, todoListId: string) {
-        let task = {id: v1(), title: text.trim(), isDone: false};
-        setTasksObj({...tasksObj, [todoListId]: [task, ...tasksObj[todoListId]]})
-    }
-    function changeTaskStatus(taskId: string, isDone: boolean, todoListId: string) {
-        setTasksObj({...tasksObj, [todoListId]: tasksObj[todoListId].map(e => e.id === taskId ? {...e, isDone} : e)})
-    }
-
-    function updateTasksObj(todoListId: string, id: string, title: string) {
-        setTasksObj({...tasksObj, [todoListId]: tasksObj[todoListId].map(el => el.id === id ? {...el, title} : el)})
+    function removeTodo(todoListIdRemove:string){
+        removeTodoList(todoListIdRemove);
     }
 
 
 
     function changeFilter(filter: ChoseType, todoListId: string) {
-        setTodoList(todoLists.map(e => e.id === todoListId ? {...e, filter} : e));
+        // setTodoList(todoLists.map(e => e.id === todoListId ? {...e, filter} : e));
+        dispatch(changeFilterAC(filter,todoListId));
     }
 
 
     function removeTodoList(todoListId: string) {
-        let dellTodo = todoLists.filter(e => e.id !== todoListId);
-        setTodoList(dellTodo)
-
+        // let dellTodo = todoLists.filter(e => e.id !== todoListId);
+        // setTodoList(dellTodo)
+        dispatch(removeTodoListAc(todoListId));
         // delete tasksObj[todoListId];
         // setTasksObj(tasksObj);
     }
@@ -76,11 +54,13 @@ function App() {
         // let todo: TodoListType = {id: myId, title: text, filter: "all"};
         // setTodoList([todo, ...todoLists]);
         // setTasksObj({...tasksObj, [todo.id]: []})
+        dispatch(addTodoListAc(myId,text))
     }
 
 
     function updateTodoLists(todoListId: string, title: string) {
-        setTodoList(todoLists.map(el => el.id === todoListId ? {...el, title} : el))
+        // setTodoList(todoLists.map(el => el.id === todoListId ? {...el, title} : el))
+        dispatch(updateTodoListsAc(todoListId,title))
     }
 
 
@@ -111,15 +91,12 @@ function App() {
                                         <Paper sx={{padding:"15px"}}>
                                 <ToDoList NameToDO={e.title}
                                                  tasks={taskForToDOList}
-                                                 removeTask={removeTask}
+                                          removeTodo={removeTodo}
                                                  changeFilter={changeFilter}
-                                                 addTask={addTask}
-                                                 changeTaskStatus={changeTaskStatus}
                                                  filter={e.filter}
                                                  todoListId={e.id}
                                                  key={e.id}
                                                  removeTodoList={removeTodoList}
-                                                 updateTasksObj={updateTasksObj}
                                                  updateTodoLists={updateTodoLists}
                                 />
                                         </Paper>

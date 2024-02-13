@@ -1,4 +1,4 @@
-import React, {ChangeEvent} from 'react';
+import React, {ChangeEvent, useCallback} from 'react';
 import MyButton from "./MyButton";
 import "./ToDoList.style.css"
 import {ChoseType} from "../App";
@@ -6,6 +6,8 @@ import {AddItemForm} from "./AddItemForm";
 import {EditableSpan} from "./EditableSpan";
 import {Delete} from "@mui/icons-material";
 import {Checkbox, IconButton} from "@mui/material";
+import {addTaskAc, changeTaskStatusAc, removeTaskAc, updateTasksAc} from "../state/TaskReducer";
+import {useDispatch} from "react-redux";
 
 
 export type TaskType = {
@@ -17,28 +19,33 @@ export type TaskType = {
 type ToDoListType = {
     NameToDO: string,
     tasks: Array<TaskType>,
-    removeTask: (id:string, todoListId:string)=>void,
     changeFilter: (value:ChoseType,id:string)=>void,
-    addTask: (text:string, todoListId:string)=>void,
-    changeTaskStatus:(taskId:string, isDone:boolean, todoListId:string)=>void,
     filter:ChoseType,
     todoListId:string,
     removeTodoList:(todoListId:string)=>void,
-    updateTasksObj:(todoListId:string,id:string,text:string)=>void,
-    updateTodoLists:(todoListId:string,title:string)=>void
+    updateTodoLists:(todoListId:string,title:string)=>void,
+    removeTodo:(todoListIdRemove:string)=>void
 }
 
 
-const ToDoList = ({tasks, NameToDO, removeTask, changeFilter,addTask,filter,changeTaskStatus,todoListId,removeTodoList,updateTasksObj,updateTodoLists}: ToDoListType) => {
+const ToDoList = React.memo(({removeTodo,tasks, NameToDO, changeFilter,filter,todoListId,removeTodoList,updateTodoLists}: ToDoListType) => {
+    console.log("TodoList")
+    const dispatch = useDispatch()
+
+
 
 
     function onCheckHandler (id:string,e:ChangeEvent<HTMLInputElement>,tasksId:string){
-        changeTaskStatus(id,e.currentTarget.checked,tasksId)
+        dispatch(changeTaskStatusAc(id,e.currentTarget.checked,tasksId))
+    }
+    function removeTask(id: string, todoListId: string) {
+        // setTasksObj({...tasksObj, [todoListId]: tasksObj[todoListId].filter(e => e.id !== id)});
+        dispatch(removeTaskAc(id,todoListId));
     }
 
     const listItems: Array<JSX.Element> = tasks.map(el=>{
         function updateTasksObjHandler(text:string){
-            updateTasksObj(todoListId,el.id,text)
+            dispatch(updateTasksAc(todoListId,el.id,text))
         }
         return (
             <li key={el.id} className={el.isDone?"isDone":""}>
@@ -52,13 +59,14 @@ const ToDoList = ({tasks, NameToDO, removeTask, changeFilter,addTask,filter,chan
             </li>
         )
     })
-    function removeTodo(todoListIdRemove:string){
-        removeTodoList(todoListIdRemove);
-    }
 
-    function addTasks(title:string){
-        addTask(title,todoListId)
-    }
+
+
+
+
+    const addTasks=useCallback((title:string)=>{
+        dispatch(addTaskAc(title,todoListId))
+    },[dispatch,todoListId]);
 
     function updateTodoListsHandler(title:string){
         updateTodoLists(todoListId,title);
@@ -90,7 +98,7 @@ const ToDoList = ({tasks, NameToDO, removeTask, changeFilter,addTask,filter,chan
             </div>
         </>
     );
-}
+})
 
 export default ToDoList;
 

@@ -22,10 +22,8 @@ const Task = React.memo(({onCheckHandler,updateTasksObjHandler,removeTask,id,isD
         <li key={id} className={isDone?"isDone":""}>
             <Checkbox onChange={(e)=>onCheckHandler(id,e.currentTarget.checked)} checked={isDone}/>
             <EditableSpan oldTitle={title} updateTasksHandler={updateTasksHandler}/>
-            <IconButton>
-                <Delete onClick={() => {
-                    removeTask(id)
-                }} />
+            <IconButton onClick={() => {removeTask(id)}}>
+                <Delete  />
             </IconButton>
         </li>
     )

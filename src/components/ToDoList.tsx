@@ -94,8 +94,8 @@ const ToDoList = React.memo(({removeTodoList,tasks, NameToDO, changeFilter,filte
                         <div className={"h3-todo"}>
                         <EditableSpan oldTitle={NameToDO} updateTasksHandler={updateTodoListsHandler}/>
 
-                        <IconButton>
-                            <Delete color={"primary"} onClick={()=>removeTodo(todoListId)} />
+                        <IconButton onClick={()=>removeTodo(todoListId)}>
+                            <Delete color={"primary"}  />
                         </IconButton>
                         </div>
                     </h3>

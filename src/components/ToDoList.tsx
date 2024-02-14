@@ -66,7 +66,7 @@ const ToDoList = React.memo(({removeTodoList,tasks, NameToDO, changeFilter,filte
 
     const listItems: Array<JSX.Element> = tasks.map(el=>{
 
-      return <Task key={el.id} id={el.id} title={el.title} isDone={el.isDone} onCheckHandler={onCheckHandler} removeTask={removeTask} updateTasksObjHandler={updateTasksObjHandler} />
+      return <Task key={el.id} element={el} onCheckHandler={onCheckHandler} removeTask={removeTask} updateTasksObjHandler={updateTasksObjHandler} />
     })
 
 

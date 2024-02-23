@@ -1,32 +1,34 @@
 import React, {useCallback} from 'react';
 import './App.css';
-import ToDoList, {TaskType} from "./components/ToDoList";
+import ToDoList from "./components/ToDoList";
 import {v1} from "uuid";
 import {AddItemForm} from "./components/AddItemForm";
 import ButtonAppBar from "./components/ButtonAppBar";
 import {Container, Grid, Paper} from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
+import {
+    addTodoListAc,
+    changeFilterAC,
+    ChoseType,
+    removeTodoListAc,
+    TodoListDomainType,
+    updateTodoListsAc
+} from "./state/TodoListReducer";
 import {RootReducerType} from "./store/store";
-import {addTodoListAc, changeFilterAC, removeTodoListAc, updateTodoListsAc} from "./state/TodoListReducer";
+import {TaskType} from "./api/TodoListAPI";
 
-export type ChoseType = "all" | "completed" | "active";
-
-export type TodoListType = {
-    id: string,
-    title: string,
-    filter: ChoseType
-}
 
 export type TaskStateType = {
     [key: string]: Array<TaskType>
 }
 
 const App = React.memo(() => {
-    console.log("APP")
 
+
+    const tasks = useSelector<RootReducerType, TaskStateType>(state => state.TaskReducer)
     const dispatch = useDispatch()
-    const todoLists = useSelector<RootReducerType, Array<TodoListType>>(state => state.TodoListReducer)
-    const tasksObj = useSelector<RootReducerType, TaskStateType>(state => state.TaskReducer)
+
+    const todoLists = useSelector<RootReducerType, Array<TodoListDomainType>>(state => state.TodoListReducer)
 
 
     const changeFilter = useCallback((filter: ChoseType, todoListId: string) => {
@@ -64,20 +66,18 @@ const App = React.memo(() => {
                         {
                             todoLists.map(e => {
 
-                                let taskForToDOList = tasksObj[e.id];
-
+                                let taskForToDOList = tasks[e.id];
 
                                 return (<Grid key={e.id} item>
                                         <Paper sx={{padding: "15px"}}>
                                             <ToDoList
                                                 key={e.id}
                                                 NameToDO={e.title}
-                                                tasks={taskForToDOList}
+                                                taskForToDOList={taskForToDOList}
                                                 removeTodoList={removeTodoList}
                                                 changeFilter={changeFilter}
                                                 filter={e.filter}
                                                 todoListId={e.id}
-
                                                 updateTodoLists={updateTodoLists}
                                             />
                                         </Paper>

@@ -9,12 +9,13 @@ const meta:Meta<typeof EditableSpan>={
     tags:['autodocs'],
     argTypes:{
         oldTitle: {
-            description: 'Hello'
+            description: 'Props Text'
         },
-        updateTasksHandler:{
-           defaultValue:"Calbback updateTasksHandler"
+        updateTasksCallbackHandler:{
+          description: "Function callback for change text"
         }
-    }
+    },
+
 }
 
 export default meta;
@@ -24,7 +25,7 @@ export type Story = StoryObj<typeof EditableSpan>
 
 export const EditableSpanExample: Story = {
     args: {
-        oldTitle:"Hello",
-       updateTasksHandler:action("Callback")
+        oldTitle:"Please enter text",
+        updateTasksCallbackHandler:action("Callback")
     },
 };

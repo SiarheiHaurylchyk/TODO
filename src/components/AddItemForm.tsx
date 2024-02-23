@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useState} from "react";
+import React, {ChangeEvent, useEffect, useState} from "react";
 import {Button, TextField} from "@mui/material";
 
 
@@ -7,11 +7,9 @@ type addItemFromPropsType = {
 
 }
 export const AddItemForm = React.memo(({addItem}:addItemFromPropsType) => {
-    console.log("AddItemForm")
 
     const [newTask, setNewTask] = useState("");
     const [error, setError] = useState(false);
-
 
 
     let isAddTaskButtonDisabled = !newTask.trim();
@@ -37,12 +35,14 @@ export const AddItemForm = React.memo(({addItem}:addItemFromPropsType) => {
         setNewTask(e.currentTarget.value)
     }
 
+
+    const labelChangeError = error?"Error!!!":"Enter Text"
+
     return (
         <>
-            <TextField label={error?"Error!!!":"Enter Text"}
+            <TextField label={labelChangeError}
                        variant={"outlined"}
                        size={"small"}
-                       helperText={error}
                        error={error}
                        onChange={onChangeHandler}
                        value={newTask}

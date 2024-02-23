@@ -1,14 +1,19 @@
-import {ChoseType, TodoListType} from "../App";
+
 import {v1} from "uuid";
+import {TodoList} from "../api/TodoListAPI";
 
 export let todoListId1 = v1();
 export let todoListId2 = v1()
 
-const initTodoState:Array<TodoListType> = [
-    {id: todoListId1, title: "What to learn", filter: "all"},
-    {id: todoListId2, title: "What to buy", filter: "all"},
-]
-export const TodoListReducer = (state:Array<TodoListType> = initTodoState,action:GlobalActionType):Array<TodoListType> =>{
+export type ChoseType = "all" | "completed" | "active";
+
+
+export type TodoListDomainType = TodoList & {
+    filter: ChoseType
+}
+
+const initTodoState:Array<TodoListDomainType> = []
+export const TodoListReducer = (state:Array<TodoListDomainType> = initTodoState,action:GlobalActionType):Array<TodoListDomainType> =>{
     switch (action.type) {
         case "CHANGE-FILTER-TODO":{
             return state.map(e => e.id === action.payload.todoListId ? {...e, filter:action.payload.filter} : e);
@@ -17,7 +22,7 @@ export const TodoListReducer = (state:Array<TodoListType> = initTodoState,action
             return state.filter(e => e.id !== action.payload.todoListId)
         }
         case "ADD-TODOLIST":{
-            let todo: TodoListType = {id: action.payload.id, title: action.payload.text, filter: "all"};
+            let todo: TodoListDomainType = {id: action.payload.id, title: action.payload.text, filter: "all",addedDate:"",order:0};
             return [todo,...state]
         }
         case "UPDATE-TODOLIST":{

@@ -1,7 +1,7 @@
-import React, {ChangeEvent, useCallback} from 'react';
+import React, {useCallback} from 'react';
 import MyButton from "./MyButton";
 import "./ToDoList.style.css"
-import {ChoseType} from "../App";
+
 import {AddItemForm} from "./AddItemForm";
 import {EditableSpan} from "./EditableSpan";
 import {Delete} from "@mui/icons-material";
@@ -9,17 +9,15 @@ import {IconButton} from "@mui/material";
 import {addTaskAc, changeTaskStatusAc, removeTaskAc, updateTasksAc} from "../state/TaskReducer";
 import {useDispatch} from "react-redux";
 import Task from "./Task";
+import {ChoseType} from "../state/TodoListReducer";
+import {TaskStatuses, TaskType} from "../api/TodoListAPI";
 
 
-export type TaskType = {
-    id: string,
-    title: string,
-    isDone: boolean
-}
+
 
 type ToDoListType = {
     NameToDO: string,
-    tasks: Array<TaskType>,
+    taskForToDOList:Array<TaskType>
     changeFilter: (value:ChoseType,id:string)=>void,
     filter:ChoseType,
     todoListId:string,
@@ -28,15 +26,15 @@ type ToDoListType = {
 }
 
 
-const ToDoList = React.memo(({removeTodoList,tasks, NameToDO, changeFilter,filter,todoListId,updateTodoLists}: ToDoListType) => {
-    console.log("TodoList")
+const ToDoList = React.memo(({removeTodoList,taskForToDOList, NameToDO, changeFilter,filter,todoListId,updateTodoLists}: ToDoListType) => {
+
     const dispatch = useDispatch()
 
     if (filter === "active") {
-        tasks = tasks.filter(el => !el.isDone );
+        taskForToDOList = taskForToDOList.filter(el => el.status === TaskStatuses.New);
     }
     if (filter === "completed") {
-        tasks = tasks.filter(el => el.isDone);
+        taskForToDOList = taskForToDOList.filter(el => el.status === TaskStatuses.Completed);
     }
 
 
@@ -56,7 +54,7 @@ const ToDoList = React.memo(({removeTodoList,tasks, NameToDO, changeFilter,filte
     },[dispatch,todoListId])
 
 
-    const updateTasksObjHandler= useCallback((id:string,text:string)=>{
+    const updateTasksHandler= useCallback((id:string,text:string)=>{
         dispatch(updateTasksAc(todoListId,id,text))
     },[dispatch,todoListId]);
 
@@ -64,9 +62,9 @@ const ToDoList = React.memo(({removeTodoList,tasks, NameToDO, changeFilter,filte
 
 
 
-    const listItems: Array<JSX.Element> = tasks.map(el=>{
+    const listItems: Array<JSX.Element> = taskForToDOList.map(el=>{
 
-      return <Task key={el.id} element={el} onCheckHandler={onCheckHandler} removeTask={removeTask} updateTasksObjHandler={updateTasksObjHandler} />
+      return <Task key={el.id} element={el} onCheckHandler={onCheckHandler} removeTask={removeTask} updateTasksHandler={updateTasksHandler} />
     })
 
 
@@ -92,7 +90,7 @@ const ToDoList = React.memo(({removeTodoList,tasks, NameToDO, changeFilter,filte
 
                     <h3>
                         <div className={"h3-todo"}>
-                        <EditableSpan oldTitle={NameToDO} updateTasksHandler={updateTodoListsHandler}/>
+                        <EditableSpan oldTitle={NameToDO} updateTasksCallbackHandler={updateTodoListsHandler}/>
 
                         <IconButton onClick={()=>removeTodo(todoListId)}>
                             <Delete color={"primary"}  />

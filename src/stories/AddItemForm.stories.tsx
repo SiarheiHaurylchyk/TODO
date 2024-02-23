@@ -9,7 +9,7 @@ const meta:Meta<typeof AddItemForm>={
     tags:['autodocs'],
     argTypes:{
         addItem:{
-            description: "Name",
+            description: "About the item",
         }
     }
 }

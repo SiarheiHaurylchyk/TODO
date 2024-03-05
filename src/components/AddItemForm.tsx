@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useEffect, useState} from "react";
+import React, {ChangeEvent, useCallback, useState} from "react";
 import {Button, TextField} from "@mui/material";
 
 
@@ -7,7 +7,7 @@ type addItemFromPropsType = {
 
 }
 export const AddItemForm = React.memo(({addItem}:addItemFromPropsType) => {
-
+    console.log("AddItemForm")
     const [newTask, setNewTask] = useState("");
     const [error, setError] = useState(false);
 

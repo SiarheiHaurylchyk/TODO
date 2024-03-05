@@ -1,7 +1,7 @@
 import {Meta, StoryObj} from "@storybook/react";
 import App from "../App";
 import {useEffect, useState} from "react";
-import {GetTaskRespons, ResponseType, TodoList, todoListAPI} from "../api/TodoListAPI";
+import {GetTaskRespons, ResponseType, todoListAPI, TodoListType} from "../api/TodoListAPI";
 
 
 const meta: Meta<typeof App> = {
@@ -19,12 +19,11 @@ export type Story = StoryObj<typeof App>
 
 export const GetTodoList = () => {
 
-    const [state, setState] = useState<Array<TodoList>>()
+    const [state, setState] = useState<Array<TodoListType>>()
 
     useEffect(() => {
         todoListAPI.getTodoListAPI()
             .then((res) => {
-                console.log(res)
                 setState(res.data)
             })
     }, [])
@@ -34,7 +33,7 @@ export const GetTodoList = () => {
 
 export const CreateTodoList = () => {
 
-    const [state, setState] = useState<ResponseType<{ item: TodoList }>>()
+    const [state, setState] = useState<ResponseType<{ item: TodoListType }>>()
 
     const [Text, setText] = useState("");
 
@@ -133,7 +132,7 @@ export const DeleteTasks = () => {
     const onClickHandler = () => {
         todoListAPI.DeleteTasks(TodoListId, TaskId)
             .then((res) => {
-                console.log(res)
+
                 setState(res.data)
             })
         setTodoListId("");
@@ -161,7 +160,9 @@ export const CreateTasks = () =>{
     const [TodoListId, setTodoListId] = useState<string>("")
     const [Text, setText] = useState<string>("");
 
+
     const onClickHandler = () =>{
+
         todoListAPI.CreateTask(TodoListId,Text)
             .then((res) => {
                 setState(res.data)
@@ -186,7 +187,6 @@ export const CreateTasks = () =>{
 
 export const UpdateTasks = () =>{
     const [state, setState] = useState<ResponseType>()
-
     const [TodoListId, setTodoListId] = useState("")
     const [TaskId, setTaskId] = useState("")
     const [Text, setText] = useState("")

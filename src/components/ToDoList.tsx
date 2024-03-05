@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import MyButton from "./MyButton";
 import "./ToDoList.style.css"
 
@@ -6,18 +6,23 @@ import {AddItemForm} from "./AddItemForm";
 import {EditableSpan} from "./EditableSpan";
 import {Delete} from "@mui/icons-material";
 import {IconButton} from "@mui/material";
-import {addTaskAc, changeTaskStatusAc, removeTaskAc, updateTasksAc} from "../state/TaskReducer";
-import {useDispatch} from "react-redux";
+import {
+    addTaskAc,
+    changeTaskStatusAc, changeTaskStatusTC,
+    fetchTasksTC,
+    removeTaskAc,
+    thunkCreaterDeleteTask, thunkCreatorAddTasks,
+    updateTasksAc, updateTasksHandlerTC
+} from "../state/TaskReducer";
+import {useSelector} from "react-redux";
 import Task from "./Task";
 import {ChoseType} from "../state/TodoListReducer";
-import {TaskStatuses, TaskType} from "../api/TodoListAPI";
-
-
+import {TaskStatuses, TaskType, todoListAPI} from "../api/TodoListAPI";
+import {RootReducerType, useAppDispatch} from "../store/store";
 
 
 type ToDoListType = {
     NameToDO: string,
-    taskForToDOList:Array<TaskType>
     changeFilter: (value:ChoseType,id:string)=>void,
     filter:ChoseType,
     todoListId:string,
@@ -26,12 +31,18 @@ type ToDoListType = {
 }
 
 
-const ToDoList = React.memo(({removeTodoList,taskForToDOList, NameToDO, changeFilter,filter,todoListId,updateTodoLists}: ToDoListType) => {
+const ToDoList = React.memo(({removeTodoList, NameToDO, changeFilter,filter,todoListId,updateTodoLists}: ToDoListType) => {
 
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
+
+    useEffect(() => {
+        dispatch(fetchTasksTC(todoListId))
+    }, []);
+
+    let taskForToDOList = useSelector<RootReducerType, Array<TaskType>>(state => state.TaskReducer[todoListId])
 
     if (filter === "active") {
-        taskForToDOList = taskForToDOList.filter(el => el.status === TaskStatuses.New);
+        taskForToDOList = taskForToDOList.filter(el => el.status === TaskStatuses.New );
     }
     if (filter === "completed") {
         taskForToDOList = taskForToDOList.filter(el => el.status === TaskStatuses.Completed);
@@ -39,23 +50,23 @@ const ToDoList = React.memo(({removeTodoList,taskForToDOList, NameToDO, changeFi
 
 
     const removeTask=useCallback((id: string)=> {
-        // setTasksObj({...tasksObj, [todoListId]: tasksObj[todoListId].filter(e => e.id !== id)});
-        dispatch(removeTaskAc(id,todoListId));
+            dispatch(thunkCreaterDeleteTask(todoListId,id));
     },[dispatch,todoListId])
 
     const addTasks=useCallback((title:string)=>{
-        dispatch(addTaskAc(title,todoListId))
+        dispatch(thunkCreatorAddTasks(todoListId,title))
     },[dispatch,todoListId]);
 
 
 
-    const onCheckHandler = useCallback((id:string,check:boolean)=>{
-        dispatch(changeTaskStatusAc(id,check,todoListId))
+    const onCheckHandler = useCallback((id:string,check:number)=>{
+
+        dispatch(changeTaskStatusTC(todoListId,id,check))
     },[dispatch,todoListId])
 
 
     const updateTasksHandler= useCallback((id:string,text:string)=>{
-        dispatch(updateTasksAc(todoListId,id,text))
+        dispatch(updateTasksHandlerTC(todoListId,id,text))
     },[dispatch,todoListId]);
 
 

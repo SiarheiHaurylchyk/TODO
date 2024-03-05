@@ -7,7 +7,7 @@ type EditableSpanProps = {
 }
 
 export const EditableSpan = React.memo((props: EditableSpanProps)=> {
-    console.log("EditableSpan")
+
     const [changeInputOrSpan, setChangeInputOrSpan] = useState(false);
     const [title,setTitle] = useState(props.oldTitle)
     function onDoubleClick() {

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const settings = {
+export const settings = {
     withCredentials: true,
     headers: {
         "API-KEY": "6195860a-4d93-4a68-a26f-ccf3ee414204"
@@ -16,7 +16,7 @@ export enum TaskStatuses {
     New = 0,
     InProgress=1,
     Completed =2,
-    Draft = 3
+    Draft = 3,
 }
 
 export enum TaskPriorities {
@@ -26,7 +26,7 @@ export enum TaskPriorities {
     Draft=3
 }
 
-export type TodoList = {
+export type TodoListType = {
     id: string,
     addedDate: string,
     order: number,
@@ -57,7 +57,6 @@ export type GetTaskRespons = {
     error: string | null,
     totalCount: number,
     items: TaskType[],
-
 }
 
 export type UpdateTaskType = {
@@ -71,11 +70,10 @@ export type UpdateTaskType = {
 
 export const todoListAPI = {
     getTodoListAPI() {
-        return instance.get<Array<TodoList>>("todo-lists");
-
+        return instance.get<Array<TodoListType>>("todo-lists");
     },
     createTodoList(Text: string) {
-        return instance.post<ResponseType<{ item: TodoList }>>("todo-lists", {title: Text});
+        return instance.post<ResponseType<{ item: TodoListType }>>("todo-lists", {title: Text});
 
     },
 
@@ -96,10 +94,7 @@ export const todoListAPI = {
     DeleteTasks(TodoListId: string, TaskId: string) {
         return instance.delete<ResponseType>(`todo-lists/${TodoListId}/tasks/${TaskId}`);
     },
-    // UpdateTask(TodoListId:string,TaskId:string,Text:string){
-    //     return  instance.put<ResponseType>(`todo-lists/${TodoListId}`,{title:Text})
-    //
-    // },
+
 
     CreateTask(TodoListId: string, Text: string) {
         return instance.post<ResponseType>(`todo-lists/${TodoListId}/tasks`, {title: Text})

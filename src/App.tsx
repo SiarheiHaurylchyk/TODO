@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import './App.css';
 import ToDoList from "./components/ToDoList";
 import {v1} from "uuid";
@@ -7,14 +7,15 @@ import ButtonAppBar from "./components/ButtonAppBar";
 import {Container, Grid, Paper} from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
 import {
-    addTodoListAc,
+    addTodoListAc, addTodoListsTC,
     changeFilterAC,
     ChoseType,
-    removeTodoListAc,
+    fetchTodoListTC,
+    removeTodoListAc, removeTodoListsTC,
     TodoListDomainType,
-    updateTodoListsAc
+    updateTodoListsAc, updateTodoListsTC
 } from "./state/TodoListReducer";
-import {RootReducerType} from "./store/store";
+import {RootReducerType, useAppDispatch} from "./store/store";
 import {TaskType} from "./api/TodoListAPI";
 
 
@@ -22,11 +23,15 @@ export type TaskStateType = {
     [key: string]: Array<TaskType>
 }
 
+
+
 const App = React.memo(() => {
 
+    const dispatch = useAppDispatch()
 
-    const tasks = useSelector<RootReducerType, TaskStateType>(state => state.TaskReducer)
-    const dispatch = useDispatch()
+    useEffect(() => {
+        dispatch(fetchTodoListTC())
+    }, []);
 
     const todoLists = useSelector<RootReducerType, Array<TodoListDomainType>>(state => state.TodoListReducer)
 
@@ -37,17 +42,16 @@ const App = React.memo(() => {
 
 
     const removeTodoList = useCallback((todoListId: string) => {
-        dispatch(removeTodoListAc(todoListId));
+        dispatch(removeTodoListsTC(todoListId))
     }, [dispatch])
 
     const addTodoList = useCallback((text: string) => {
-        const myId = v1();
-        dispatch(addTodoListAc(myId, text))
+      dispatch(addTodoListsTC(text))
     }, [dispatch])
 
 
     const updateTodoLists = useCallback((todoListId: string, title: string) => {
-        dispatch(updateTodoListsAc(todoListId, title))
+        dispatch(updateTodoListsTC(todoListId, title))
     }, [dispatch])
 
 
@@ -66,14 +70,13 @@ const App = React.memo(() => {
                         {
                             todoLists.map(e => {
 
-                                let taskForToDOList = tasks[e.id];
+
 
                                 return (<Grid key={e.id} item>
                                         <Paper sx={{padding: "15px"}}>
                                             <ToDoList
                                                 key={e.id}
                                                 NameToDO={e.title}
-                                                taskForToDOList={taskForToDOList}
                                                 removeTodoList={removeTodoList}
                                                 changeFilter={changeFilter}
                                                 filter={e.filter}

@@ -1,5 +1,5 @@
 import {Meta, StoryObj} from "@storybook/react";
-import App from "../App";
+import App from "../components/App/App";
 import {useEffect, useState} from "react";
 import {GetTaskRespons, ResponseType, todoListAPI, TodoListType} from "../api/TodoListAPI";
 

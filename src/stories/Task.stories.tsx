@@ -1,5 +1,5 @@
 import {Meta, StoryObj} from "@storybook/react";
-import Task from "../components/Task";
+import Task from "../components/TodoList/Task/Task";
 import {action} from "@storybook/addon-actions";
 import {TaskStatuses} from "../api/TodoListAPI";
 import {v1} from "uuid";
@@ -19,7 +19,7 @@ const meta:Meta<typeof Task>={
             description:"This function update task",
 
         },
-        onCheckHandler: {
+        updateCheckHandler: {
             description: "This function change task check",
         }
 
@@ -28,7 +28,7 @@ const meta:Meta<typeof Task>={
         element:{id: v1(), title: "HTML", status:TaskStatuses.New,addedDate:"",startDate:"",order:1,deadline:"",priority:1,description:"Desk",todoListId:"todolistId1"},
         removeTask:action("Delete task"),
         updateTasksHandler:action("UpdateTask"),
-        onCheckHandler:action("Chenge my checked ")
+        updateCheckHandler:action("Chenge my checked ")
     }
 }
 
@@ -43,6 +43,6 @@ export const TaskStory: Story = {
         element:{id: v1(), title: "HTML", status:TaskStatuses.New,addedDate:"",startDate:"",order:1,deadline:"",priority:1,description:"Desk",todoListId:"todolistId1"},
         removeTask:action("Delete task"),
         updateTasksHandler:action("UpdateTask"),
-        onCheckHandler:action("Chenge my checked ")
+        updateCheckHandler:action("Chenge my checked ")
     }
 };

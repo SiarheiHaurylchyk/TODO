@@ -1,9 +1,9 @@
 import React, {useCallback, useEffect} from 'react';
 import './App.css';
-import ToDoList from "./components/ToDoList";
+import ToDoList from "../TodoList/ToDoList";
 import {v1} from "uuid";
-import {AddItemForm} from "./components/AddItemForm";
-import ButtonAppBar from "./components/ButtonAppBar";
+import {AddItemForm} from "../AddItemForm/AddItemForm";
+import ButtonAppBar from "../Button/ButtonAppBar";
 import {Container, Grid, Paper} from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
 import {
@@ -14,9 +14,9 @@ import {
     removeTodoListAc, removeTodoListsTC,
     TodoListDomainType,
     updateTodoListsAc, updateTodoListsTC
-} from "./state/TodoListReducer";
-import {RootReducerType, useAppDispatch} from "./store/store";
-import {TaskType} from "./api/TodoListAPI";
+} from "../../state/TodoListReducer";
+import {RootReducerType, useAppDispatch} from "../../store/store";
+import {TaskType} from "../../api/TodoListAPI";
 
 
 export type TaskStateType = {

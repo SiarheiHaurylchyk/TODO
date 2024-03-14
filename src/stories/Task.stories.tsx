@@ -9,7 +9,7 @@ const meta:Meta<typeof Task>={
     component:Task,
     tags:['autodocs'],
     argTypes:{
-        element:{
+        task:{
            description:"Obj task",
         },
         removeTask:{
@@ -25,7 +25,7 @@ const meta:Meta<typeof Task>={
 
     },
     args:{
-        element:{id: v1(), title: "HTML", status:TaskStatuses.New,addedDate:"",startDate:"",order:1,deadline:"",priority:1,description:"Desk",todoListId:"todolistId1"},
+        task:{id: v1(), title: "HTML", status:TaskStatuses.New,addedDate:"",startDate:"",order:1,deadline:"",priority:1,description:"Desk",todoListId:"todolistId1",entityStatus:"idle"},
         removeTask:action("Delete task"),
         updateTasksHandler:action("UpdateTask"),
         updateCheckHandler:action("Chenge my checked ")
@@ -40,7 +40,7 @@ export type Story = StoryObj<typeof Task>
 
 export const TaskStory: Story = {
     args:{
-        element:{id: v1(), title: "HTML", status:TaskStatuses.New,addedDate:"",startDate:"",order:1,deadline:"",priority:1,description:"Desk",todoListId:"todolistId1"},
+        task:{id: v1(), title: "HTML", status:TaskStatuses.New,addedDate:"",startDate:"",order:1,deadline:"",priority:1,description:"Desk",todoListId:"todolistId1",entityStatus:"idle"},
         removeTask:action("Delete task"),
         updateTasksHandler:action("UpdateTask"),
         updateCheckHandler:action("Chenge my checked ")

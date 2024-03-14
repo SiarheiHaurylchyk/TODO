@@ -1,9 +1,11 @@
 import React, {ChangeEvent, useState} from "react";
 import {Input} from "@mui/material";
+import {RequestStatusType} from "../../state/AppReduser";
 
 type EditableSpanProps = {
     oldTitle: string,
     updateTasksCallbackHandler:(title:string)=>void,
+    disabled?:RequestStatusType
 }
 
 export const EditableSpan = React.memo((props: EditableSpanProps)=> {
@@ -11,7 +13,9 @@ export const EditableSpan = React.memo((props: EditableSpanProps)=> {
     const [changeInputOrSpan, setChangeInputOrSpan] = useState(false);
     const [title,setTitle] = useState(props.oldTitle)
     function onDoubleClick() {
-        setChangeInputOrSpan(!changeInputOrSpan);
+        if (props.disabled !=="loading") {
+            setChangeInputOrSpan(!changeInputOrSpan);
+        }
     }
     const onBlur=()=> {
         if(changeInputOrSpan)props.updateTasksCallbackHandler(title);
@@ -22,6 +26,6 @@ export const EditableSpan = React.memo((props: EditableSpanProps)=> {
     }
 
     return changeInputOrSpan?
-        <Input onChange={onChange} value={title} onBlur={onBlur} autoFocus/> :
+        <Input onChange={onChange} value={title} onBlur={onBlur} autoFocus disabled={props.disabled==="loading"}/> :
         <span onDoubleClick={onDoubleClick}>{props.oldTitle}</span>
 })

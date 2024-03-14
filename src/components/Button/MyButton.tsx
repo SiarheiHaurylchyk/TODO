@@ -12,11 +12,14 @@ type ButtonType = {
 function MyButton({onClick, isDisabled,  children,isActive}: ButtonType) {
 
     return (
-        <Button variant={isActive? "contained": "outlined"}
-                size={"small"}
-                disabled={isDisabled}
-                onClick={onClick}>{children}
-        </Button>
+        <>
+            <Button variant={isActive? "contained": "outlined"}
+                    size={"small"}
+                    disabled={isDisabled}
+                    onClick={onClick}>{children}
+            </Button>
+        </>
+
     );
 }
 

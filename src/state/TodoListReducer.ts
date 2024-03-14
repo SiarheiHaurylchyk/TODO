@@ -2,16 +2,17 @@
 import {v1} from "uuid";
 import {todoListAPI, TodoListType} from "../api/TodoListAPI";
 import {Dispatch} from "redux";
+import {RequestStatusType, setAppErrorAC, setAppStatusAC} from "./AppReduser";
 
 
-export let todoListId1 = v1();
-export let todoListId2 = v1()
+
 
 export type ChoseType = "all" | "completed" | "active";
 
 
 export type TodoListDomainType = TodoListType & {
-    filter: ChoseType
+    filter: ChoseType,
+    entityStatus:RequestStatusType
 }
 
 const initTodoState:Array<TodoListDomainType> = []
@@ -25,7 +26,7 @@ export const TodoListReducer = (state:Array<TodoListDomainType> = initTodoState,
         }
         case "ADD-TODOLIST":{
             const rez = action.payload.todoList
-            return [{...action.payload.todoList,filter:"all"},...state]
+            return [{...action.payload.todoList,filter:"all",entityStatus:'idle'},...state]
         }
         case "UPDATE-TODOLIST":{
            return  state.map(el => el.id === action.payload.todoListId ? {...el, title:action.payload.title} : el)
@@ -34,16 +35,21 @@ export const TodoListReducer = (state:Array<TodoListDomainType> = initTodoState,
         case "SET-TODOLIST":{
             return action.payload.todoList.map(tl=> {
                 return {
-                    ...tl, filter:"all"
+                    ...tl, filter:"all",
+                    entityStatus:"idle"
                 }
             })
+        }
+
+        case "SET-ENTITYSTATUS":{
+            return  state.map(el => el.id === action.payload.id ? {...el,entityStatus:action.payload.status} : el)
         }
 
         default: return state
     }
 }
 
-export type GlobalActionType = changeFilterACType|removeTodoListAcType|addTodoListAcType|updateTodoListsAcType|setTodolistAcType
+export type GlobalActionType = changeFilterACType|removeTodoListAcType|addTodoListAcType|updateTodoListsAcType|setTodolistAcType|setEntityStatusAcType
 
 type changeFilterACType = ReturnType<typeof changeFilterAC>
 export const changeFilterAC=(filter: ChoseType, todoListId: string)=>{
@@ -103,11 +109,23 @@ export const setTodolistAc = (todoList:Array<TodoListType>)=>{
        
 }
 
+export type setEntityStatusAcType = ReturnType<typeof  setEntityStatusAc>
+export const setEntityStatusAc = (id:string, status:RequestStatusType)=>{
+    return{
+        type: "SET-ENTITYSTATUS",
+        payload:{
+            id,status
+        }
+    }as const
+}
+
 export const fetchTodoListTC=()=> {
     return (dispatch: Dispatch) => {
+        dispatch(setAppStatusAC("loading"))
         todoListAPI.getTodoListAPI()
             .then(res => {
                 dispatch(setTodolistAc(res.data))
+                dispatch(setAppStatusAC("succeeded"))
             })
     }
 }
@@ -115,20 +133,36 @@ export const fetchTodoListTC=()=> {
 export const addTodoListsTC=(title:string)=>(dispatch:Dispatch)=>{
     todoListAPI.createTodoList(title)
         .then(res=>{
-            dispatch(addTodoListAc(res.data.data.item))
+            if (res.data.resultCode===0){
+                dispatch(addTodoListAc(res.data.data.item))
+            }
+            else {
+                if (res.data.messages.length){
+                    dispatch(setAppErrorAC(res.data.messages[0]))
+                }
+                else {
+                    dispatch(setAppErrorAC("ErrorAddTodo"))
+                }
+            }
         })
 }
 
 export const removeTodoListsTC=(todoListId:string)=>(dispatch:Dispatch)=>{
+    dispatch(setEntityStatusAc(todoListId,"loading"))
+    dispatch(setAppStatusAC("loading"))
     todoListAPI.DeleteTodoList(todoListId)
         .then(res=>{
             dispatch(removeTodoListAc(todoListId))
+            dispatch(setEntityStatusAc(todoListId,"succeeded"))
+            dispatch(setAppStatusAC("succeeded"))
         })
 }
 
 export const updateTodoListsTC=(todoListId: string, title: string)=>(dispatch:Dispatch)=>{
+    dispatch(setEntityStatusAc(todoListId,"loading"))
     todoListAPI.UpdateTodoList(todoListId,title)
         .then(res=>{
             dispatch(updateTodoListsAc(todoListId,title))
+            dispatch(setEntityStatusAc(todoListId,"succeeded"))
         })
 }

@@ -1,9 +1,9 @@
 import {RootReducerType, useAppDispatch} from "../../store/store";
-import React, {useCallback} from "react";
+import React, {useCallback, useEffect} from "react";
 import {
     addTodoListsTC,
     changeFilterAC,
-    ChoseType,
+    ChoseType, fetchTodoListTC,
     removeTodoListsTC,
     TodoListDomainType,
     updateTodoListsTC
@@ -12,15 +12,26 @@ import {CircularProgress, Grid, LinearProgress, Paper} from "@mui/material";
 import CustomizedSnackbars from "../SnackBar/SnackBar";
 import ToDoList from "../TodoList/ToDoList";
 import {useSelector} from "react-redux";
-import {RequestStatusType} from "../../state/AppReduser";
+import {RequestStatusType} from "../../state/AppReducer";
 import {AddItemForm} from "../AddItemForm/AddItemForm";
+import {Navigate, useNavigate} from "react-router";
 
 
 export const IterableTodo = () => {
 
-    const dispatch = useAppDispatch()
+    const dispatch = useAppDispatch();
 
-    const todoLists = useSelector<RootReducerType, Array<TodoListDomainType>>(state => state.TodoListReducer)
+    const todoLists = useSelector<RootReducerType, Array<TodoListDomainType>>(state => state.TodoListReducer);
+
+    const isLoginIn = useSelector<RootReducerType,boolean>(state =>state.auth.isLoginIn );
+
+
+    useEffect(() => {
+        if (!isLoginIn) {
+          return
+        }
+        dispatch(fetchTodoListTC())
+    }, []);
 
 
     const addTodoList = useCallback((text: string) => {
@@ -42,6 +53,9 @@ export const IterableTodo = () => {
     }, [dispatch])
 
 
+    if (!isLoginIn) {
+        return <Navigate to={'/login'} />
+    }
 
 
     return (
@@ -60,7 +74,6 @@ export const IterableTodo = () => {
                             todoLists={e}
                             updateTodoLists={updateTodoLists}
                         />
-
                     </Paper>
                 </Grid>
             ))}

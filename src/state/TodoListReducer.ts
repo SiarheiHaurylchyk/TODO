@@ -1,8 +1,9 @@
 
-import {v1} from "uuid";
 import {todoListAPI, TodoListType} from "../api/TodoListAPI";
 import {Dispatch} from "redux";
-import {RequestStatusType, setAppErrorAC, setAppStatusAC} from "./AppReduser";
+import {RequestStatusType, setAppErrorAC, setAppStatusAC} from "./AppReducer";
+import {AxiosError} from "axios";
+import {errorFunctionMessage} from "../utils/utils";
 
 
 
@@ -40,6 +41,7 @@ export const TodoListReducer = (state:Array<TodoListDomainType> = initTodoState,
                 }
             })
         }
+
 
         case "SET-ENTITYSTATUS":{
             return  state.map(el => el.id === action.payload.id ? {...el,entityStatus:action.payload.status} : el)
@@ -119,14 +121,19 @@ export const setEntityStatusAc = (id:string, status:RequestStatusType)=>{
     }as const
 }
 
+
+
 export const fetchTodoListTC=()=> {
     return (dispatch: Dispatch) => {
         dispatch(setAppStatusAC("loading"))
         todoListAPI.getTodoListAPI()
             .then(res => {
                 dispatch(setTodolistAc(res.data))
-                dispatch(setAppStatusAC("succeeded"))
-            })
+            }).catch((err)=>{
+                dispatch(setAppErrorAC(err.message))
+        }).finally(()=>{
+            dispatch(setAppStatusAC("succeeded"))
+        })
     }
 }
 
@@ -136,15 +143,10 @@ export const addTodoListsTC=(title:string)=>(dispatch:Dispatch)=>{
             if (res.data.resultCode===0){
                 dispatch(addTodoListAc(res.data.data.item))
             }
-            else {
-                if (res.data.messages.length){
-                    dispatch(setAppErrorAC(res.data.messages[0]))
-                }
-                else {
-                    dispatch(setAppErrorAC("ErrorAddTodo"))
-                }
-            }
-        })
+            errorFunctionMessage<{item:TodoListType}>(res.data,dispatch)
+        }).catch((err:AxiosError)=>{
+            setAppErrorAC(err.message)
+    })
 }
 
 export const removeTodoListsTC=(todoListId:string)=>(dispatch:Dispatch)=>{

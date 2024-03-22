@@ -68,6 +68,32 @@ export type UpdateTaskType = {
     deadline: string
 }
 
+export type LoginParamsType = {
+    email:string,
+    password:string,
+    rememberMe?:boolean,
+    captcha?:boolean
+}
+
+type getResponseAuth = {
+    id: number,
+    email: string,
+    login: string
+}
+
+export const authApi = {
+    login(data:LoginParamsType){
+       return  instance.post<ResponseType<{userId:number}>>('/auth/login',data);
+    },
+    getAuth(){
+        return instance.get<ResponseType<getResponseAuth>>('/auth/me')
+    },
+    logOut(){
+        return instance.delete<ResponseType>('/auth/login');
+    }
+}
+
+
 export const todoListAPI = {
     getTodoListAPI() {
         return instance.get<Array<TodoListType>>("todo-lists");
@@ -97,12 +123,10 @@ export const todoListAPI = {
 
 
     CreateTask(TodoListId: string, Text: string) {
-        return instance.post<ResponseType>(`todo-lists/${TodoListId}/tasks`, {title: Text})
+        return instance.post<ResponseType<{item:TaskType}>>(`todo-lists/${TodoListId}/tasks`, {title: Text})
     },
 
     UpdateTask(TodoListId: string, TaskId: string, model:UpdateTaskType) {
         return instance.put<ResponseType>(`todo-lists/${TodoListId}/tasks/${TaskId}`, model)
     }
-
-
 }

@@ -1,6 +1,6 @@
 import React, {ChangeEvent, useState} from "react";
 import {Input} from "@mui/material";
-import {RequestStatusType} from "../../state/AppReduser";
+import {RequestStatusType} from "../../state/AppReducer";
 
 type EditableSpanProps = {
     oldTitle: string,

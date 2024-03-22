@@ -6,7 +6,7 @@ import {TaskStatuses, TaskType} from "../../../api/TodoListAPI";
 import {TodoListDomainType} from "../../../state/TodoListReducer";
 import {useSelector} from "react-redux";
 import {RootReducerType} from "../../../store/store";
-import {RequestStatusType} from "../../../state/AppReduser";
+import {RequestStatusType} from "../../../state/AppReducer";
 import Box from "@mui/material/Box";
 import {TaskTypeEntity} from "../../../state/TaskReducer";
 

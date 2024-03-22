@@ -6,13 +6,13 @@ import {Provider} from "react-redux";
 import {RootReducerType} from "../store/store";
 import React from "react";
 import {TaskStatuses} from "../api/TodoListAPI";
-import {AppReduser} from "../state/AppReduser";
+import {AppReducer} from "../state/AppReducer";
 import {thunk} from "redux-thunk";
 
 const RootReducer = combineReducers({
     TodoListReducer: TodoListReducer,
     TaskReducer: TaskReducer,
-    app:AppReduser
+    app:AppReducer
 })
 
 const initialGlobalState = {
@@ -33,7 +33,11 @@ const initialGlobalState = {
     app:{
         error:null,
         status:'idle'
+    },
+    auth:{
+        isLoginIn: false
     }
+
 };
 
 

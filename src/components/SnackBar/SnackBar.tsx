@@ -4,7 +4,7 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import {useSelector} from "react-redux";
 import {RootReducerType, useAppDispatch} from "../../store/store";
-import {setAppErrorAC} from "../../state/AppReduser";
+import {setAppErrorAC} from "../../state/AppReducer";
 
 export default function CustomizedSnackbars() {
     // const [open, setOpen] = React.useState(false);

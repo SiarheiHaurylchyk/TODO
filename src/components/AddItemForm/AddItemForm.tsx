@@ -1,6 +1,6 @@
 import React, {ChangeEvent, useCallback, useState} from "react";
 import {Button, TextField} from "@mui/material";
-import {RequestStatusType} from "../../state/AppReduser";
+import {RequestStatusType} from "../../state/AppReducer";
 
 
 type addItemFromPropsType = {

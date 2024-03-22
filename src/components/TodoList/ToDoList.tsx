@@ -17,7 +17,8 @@ import Task from "./Task/Task";
 import {ChoseType, TodoListDomainType} from "../../state/TodoListReducer";
 import {TaskStatuses, TaskType} from "../../api/TodoListAPI";
 import {RootReducerType, useAppDispatch} from "../../store/store";
-import {RequestStatusType} from "../../state/AppReduser";
+import {RequestStatusType} from "../../state/AppReducer";
+import {v1} from "uuid";
 
 
 type ToDoListType = {
@@ -33,9 +34,8 @@ const ToDoList = React.memo(({removeTodoList, NameToDO, changeFilter,todoLists,u
 
     const dispatch = useAppDispatch()
 
-    let taskForToDOList = useSelector<RootReducerType, Array<TaskTypeEntity>>(state => state.TaskReducer[todoLists.id])
+    let taskForToDOList = useSelector<RootReducerType, Array<TaskTypeEntity>>(state => state.TaskReducer[todoLists.id]);
 
-    const status = useSelector<RootReducerType, RequestStatusType>(state => state.app.statusTask)
 
 
 
@@ -50,7 +50,9 @@ const ToDoList = React.memo(({removeTodoList, NameToDO, changeFilter,todoLists,u
     },[dispatch,todoLists.id])
 
     const addTasks=useCallback((title:string)=>{
-        dispatch(thunkCreatorAddTasks(todoLists.id,title))
+
+            dispatch(thunkCreatorAddTasks(todoLists.id,title))
+
     },[dispatch,todoLists.id]);
 
     const updateCheckHandler = useCallback((id:string,check:number)=>{

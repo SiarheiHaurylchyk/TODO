@@ -1,72 +1,62 @@
 import {Dispatch} from "redux";
-import {setAppStatusAC} from "./AppReducer";
+import {setAppErrorAC, setAppStatusAC} from "./AppReducer";
 import {authApi, LoginParamsType} from "../api/TodoListAPI";
-import {errorFunctionMessage} from "../utils/utils";
+import {errorFunctionMessage, networkError} from "../utils/utils";
+import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
-
-type initialStateType = {
-    isLoginIn:boolean
-}
 
 const initialState = {
     isLoginIn:false
 }
 
-export const authReducer = (state:initialStateType =initialState , action:ActionsType)=>{
-    switch (action.type) {
-        case "IS-LOGIN":{
-            return {...state, isLoginIn: action.isLoginIn}
-        }
-
-        default:{
-            return state
+const slice = createSlice({
+    name: "auth",
+    initialState:initialState,
+    reducers:{
+        setIsLoginAc(state,action:PayloadAction<{value:boolean}>){
+              state.isLoginIn=action.payload.value
         }
     }
+})
 
-}
+ export const authReducer = slice.reducer;
 
-type setIsLoginType = ReturnType<typeof setIsLoginAc>
-export const setIsLoginAc = (isLoginIn:boolean) =>{
-    return{
-        type: "IS-LOGIN",
-        isLoginIn
-    }as const
-}
 
-type ActionsType = setIsLoginType
+export const {setIsLoginAc} = slice.actions;
 
 export const loginTc = (data:LoginParamsType) => (dispatch:Dispatch)=>{
-    dispatch(setAppStatusAC("loading"))
+    dispatch(setAppStatusAC({status:"loading"}))
     authApi.login(data)
         .then(res=>{
             if(res.data.resultCode===0){
-                dispatch(setIsLoginAc(true))
-                dispatch(setAppStatusAC("succeeded"))
+                dispatch(setIsLoginAc({value:true}))
+                dispatch(setAppStatusAC({status:"succeeded"}))
             }
             else {
              errorFunctionMessage(res.data,dispatch)
 
             }
         }).catch(err=>{
-        errorFunctionMessage(err,dispatch)
+
+        networkError(err,dispatch)
 
     })
 }
 
 export const logOutTc = () => (dispatch:Dispatch)=>{
-    dispatch(setAppStatusAC("loading"))
+    dispatch(setAppStatusAC({status:"loading"}))
     authApi.logOut()
         .then(res=>{
             if(res.data.resultCode===0){
-                dispatch(setIsLoginAc(false))
-                dispatch(setAppStatusAC("succeeded"))
+                dispatch(setIsLoginAc({value:false}))
+                dispatch(setAppStatusAC({status:"succeeded"}))
             }
             else {
                 errorFunctionMessage(res.data,dispatch)
 
             }
         }).catch(err=>{
-        errorFunctionMessage(err,dispatch)
+        networkError(err,dispatch)
 
     })
 }

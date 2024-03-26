@@ -40,7 +40,7 @@ export const IterableTodo = () => {
 
 
     const changeFilter = useCallback((filter: ChoseType, todoListId: string) => {
-        dispatch(changeFilterAC(filter, todoListId));
+        dispatch(changeFilterAC({filter,todoListId}));
     }, [dispatch])
 
 

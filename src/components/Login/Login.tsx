@@ -24,7 +24,7 @@ export const Login = () => {
         const isLoginIn = useSelector<RootReducerType,boolean>(state => state.auth.isLoginIn)
 
     useEffect(() => {
-        dispatch(setAppStatusAC("idle"))
+        dispatch(setAppStatusAC({status:"idle"}))
     }, []);
 
     console.log(isLoginIn)

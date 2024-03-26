@@ -16,7 +16,7 @@ export default function CustomizedSnackbars() {
         if (reason === 'clickaway') {
             return;
         }
-        dispath(setAppErrorAC(null))
+        dispath(setAppErrorAC({error:null}))
     };
 
 

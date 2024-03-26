@@ -8,7 +8,6 @@ type addItemFromPropsType = {
     disabled?:RequestStatusType
 }
 export const AddItemForm = React.memo(({addItem,disabled}:addItemFromPropsType) => {
-    console.log("AddItemForm")
     const [newTask, setNewTask] = useState("");
     const [error, setError] = useState(false);
 

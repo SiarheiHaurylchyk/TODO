@@ -2,11 +2,12 @@ import {Dispatch} from "redux";
 import {authApi} from "../api/TodoListAPI";
 import {errorFunctionMessage} from "../utils/utils";
 import {setIsLoginAc} from "./AuthReducer";
+import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
 
 
-export type initialStateType = {
+type initialStateType = {
     status: RequestStatusType,
     statusTask:RequestStatusType,
     statusAdd:RequestStatusType,
@@ -21,58 +22,40 @@ const initialState:initialStateType = {
     error:null,
     setInitiolized:false
 }
-export const AppReducer = (state:initialStateType=initialState, action:ActionsType)=>{
-    switch (action.type) {
-        case 'APP/SET-STATUS':{
-            return {...state,status:action.status}
-        }
-        case "TASK/SET-STATUS-TASK":{
-            return  {...state,statusTask:action.status}
-        }
-        case "SET-STATUS-ADD":{
-            return  {...state,statusAdd:action.status}
-        }
-        case 'APP/SET-ERROR':{
-            return {...state,error:action.error}
-        }
-        case "SET-INITIALIZED":{
-            return {...state,setInitiolized:action.status}
-        }
-        default:{
-            return {...state}
-        }
 
+const slice = createSlice({
+    name:"AppReducer",
+    initialState:initialState,
+    reducers:{
+        setAppStatusAC(state,action:PayloadAction<{status:RequestStatusType}>){
+          state.status=action.payload.status
+        },
+        setStatusTaskAC(state,action:PayloadAction<{status:RequestStatusType}>){
+            state.statusTask=action.payload.status
+        },
+        setStatusAddAC(state,action:PayloadAction<{status:RequestStatusType}>){
+            state.statusAdd=action.payload.status
+        },
+        setInitializedAC(state, action:PayloadAction<{status:boolean}>){
+           state.setInitiolized=action.payload.status
+        },
+        setAppErrorAC(state, action:PayloadAction<{error: null|string}>){
+            state.error=action.payload.error
+        }
     }
+})
 
-}
+export const AppReducer = slice.reducer;
 
 
-export type SetAppStatusActionType = ReturnType<typeof setAppStatusAC>
-export const setAppStatusAC = (status: RequestStatusType) =>
-    ({ type: 'APP/SET-STATUS', status }) as const
-
-export type SetStatusTaskActionType = ReturnType<typeof setStatusTaskAC>
-export const setStatusTaskAC = (status: RequestStatusType) =>
-    ({ type: 'TASK/SET-STATUS-TASK', status }) as const
-
-export type SetStatusAddType = ReturnType<typeof setStatusAddAC>
-export const setStatusAddAC = (status: RequestStatusType) =>
-    ({ type: 'SET-STATUS-ADD', status }) as const
-
-export type setInitializedType = ReturnType<typeof setInitializedAC>
-export const setInitializedAC = (status: boolean) =>
-    ({ type: 'SET-INITIALIZED', status }) as const
-
-export type SetAppErrorActionType = ReturnType<typeof setAppErrorAC>
-export const setAppErrorAC = (error: null|string) => ({ type: 'APP/SET-ERROR', error }) as const
-
+export const {setAppStatusAC,setInitializedAC,setStatusTaskAC,setStatusAddAC,setAppErrorAC} = slice.actions;
 
 export const initializeAppTC = () => (dispatch: Dispatch) => {
-    dispatch(setAppStatusAC("loading"));
+    dispatch(setAppStatusAC({status:"loading"}));
     authApi.getAuth().then(res => {
         if (res.data.resultCode === 0) {
-            dispatch(setIsLoginAc(true))
-            dispatch(setAppStatusAC("succeeded"))
+            dispatch(setIsLoginAc({value:true}))
+            dispatch(setAppStatusAC({status:"succeeded"}))
         }
         else {
             errorFunctionMessage(res.data,dispatch)
@@ -81,10 +64,9 @@ export const initializeAppTC = () => (dispatch: Dispatch) => {
         errorFunctionMessage(err,dispatch)
 
     }).finally(()=>{
-        dispatch(setInitializedAC(true))
+        dispatch(setInitializedAC({status:true}))
     })
 }
 
 
 
-type ActionsType = SetAppStatusActionType | SetAppErrorActionType|SetStatusTaskActionType|SetStatusAddType|setInitializedType

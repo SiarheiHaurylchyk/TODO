@@ -1,6 +1,7 @@
-import {AddItemForm} from "../components/AddItemForm/AddItemForm";
+
 import {Meta, StoryObj} from "@storybook/react";
 import {action} from '@storybook/addon-actions'
+import {AddItemForm} from "../common/components/AddItemForm/AddItemForm";
 
 
 const meta:Meta<typeof AddItemForm>={

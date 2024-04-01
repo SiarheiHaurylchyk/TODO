@@ -1,18 +1,17 @@
 import {applyMiddleware, combineReducers, legacy_createStore} from "redux";
-import {TaskReducer} from "../state/TaskReducer";
-import {TodoListReducer} from "../state/TodoListReducer";
+import {TaskSlice} from "../store/slice/TaskSlice";
+import {TodoListSlice} from "../store/slice/TodoListSlice";
 import {v1} from "uuid";
 import {Provider} from "react-redux";
-import {RootReducerType} from "../store/store";
 import React from "react";
-import {TaskStatuses} from "../api/TodoListAPI";
-import {AppReducer} from "../state/AppReducer";
+import {AppSlice} from "../store/slice/AppSlice";
 import {thunk} from "redux-thunk";
+import {TaskStatuses} from "../common/components/enums/enums";
 
 const RootReducer = combineReducers({
-    TodoListReducer: TodoListReducer,
-    TaskReducer: TaskReducer,
-    app:AppReducer
+    TodoListReducer: TodoListSlice,
+    TaskReducer: TaskSlice,
+    app:AppSlice
 })
 
 const initialGlobalState = {

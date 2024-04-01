@@ -1,7 +1,9 @@
 import {Meta, StoryObj} from "@storybook/react";
-import App from "../components/App/App";
+
 import {useEffect, useState} from "react";
-import {GetTaskRespons, ResponseType, todoListAPI, TodoListType} from "../api/TodoListAPI";
+import { ResponseType, todoListAPI, TodoListType} from "../features/api/TodoListAPI";
+import {GetTaskRespons, TasksAPI} from "../features/api/TasksAPI";
+import App from "../App/App";
 
 
 const meta: Meta<typeof App> = {
@@ -105,7 +107,7 @@ export const GetTasks = () => {
 
 
     const onClickHandler = () =>{
-        todoListAPI.GetTasks(TodoListId)
+        TasksAPI.GetTasks(TodoListId)
             .then((res) => {
                 console.log(res)
                 setState(res.data)
@@ -129,7 +131,7 @@ export const DeleteTasks = () => {
     const [TaskId, setTaskId] = useState("")
 
     const onClickHandler = () => {
-        todoListAPI.DeleteTasks(TodoListId, TaskId)
+        TasksAPI.DeleteTasks(TodoListId, TaskId)
             .then((res) => {
 
                 setState(res.data)
@@ -162,7 +164,7 @@ export const CreateTasks = () =>{
 
     const onClickHandler = () =>{
 
-        todoListAPI.CreateTask(TodoListId,Text)
+        TasksAPI.CreateTask(TodoListId,Text)
             .then((res) => {
                 setState(res.data)
             })
@@ -194,7 +196,7 @@ export const UpdateTasks = () =>{
     const [priority, setPriority] = useState(0)
 
     const onClickHandler = () =>{
-        todoListAPI.UpdateTask(TodoListId, TaskId, {
+        TasksAPI.UpdateTask(TodoListId, TaskId, {
             title: Text,
             description: description,
             status: status,

@@ -1,8 +1,9 @@
 import {Meta, StoryObj} from "@storybook/react";
-import Task from "../components/TodoList/Task/Task";
 import {action} from "@storybook/addon-actions";
-import {TaskStatuses} from "../api/TodoListAPI";
+
 import {v1} from "uuid";
+import Task from "../common/components/TodoList/Task/Task";
+import {TaskStatuses} from "../common/components/enums/enums";
 
 const meta:Meta<typeof Task>={
     title: "Task",

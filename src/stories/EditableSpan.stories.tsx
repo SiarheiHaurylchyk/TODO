@@ -1,6 +1,7 @@
 import {Meta, StoryObj} from "@storybook/react";
 import {action} from '@storybook/addon-actions'
-import {EditableSpan} from "../components/EditableSpan/EditableSpan";
+import {EditableSpan} from "../common/components/EditableSpan/EditableSpan";
+
 
 
 const meta:Meta<typeof EditableSpan>={

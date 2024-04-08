@@ -1,10 +1,11 @@
-import { TodoListType} from "../../features/api/TodoListAPI";
-import {RequestStatusType, setAppErrorAC, setStatusAddAC, setStatusTaskAC} from "./AppSlice";
+import {RequestStatusType, setAppErrorAC, setStatusAddAC, setStatusTaskAC} from "../../../../../App/AppSlice";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {addTodoListAc, removeTodoListAc} from "./TodoListSlice";
-import {networkError} from "../../common/utils/utils";
-import {createAppAsyncThunk} from "../../common/utils/createAsyncThunk";
-import {TasksAPI, TaskType, UpdateTaskType} from "../../features/api/TasksAPI";
+import {TodoListThunk} from "../TodoListSlice";
+import {TasksAPI, TaskType, UpdateTaskType} from "../../../../../features/api/TasksAPI";
+import {TodoListType} from "../../../../../features/api/TodoListAPI";
+import {createAppAsyncThunk} from "../../../../utils/createAsyncThunk";
+import {networkError} from "../../../../utils/utils";
+
 
 
 export type TaskTypeEntity = TaskType & {
@@ -55,10 +56,10 @@ const slice = createSlice({
                         state[action.payload.todoListId][index] = {...state[action.payload.todoListId][index], ...action.payload.model}
                     }
             })
-            .addCase(addTodoListAc, (state, action: PayloadAction<{ todoList: TodoListType }>) => {
+            .addCase(TodoListThunk.addTodoLists.fulfilled, (state, action: PayloadAction<{ todoList: TodoListType }>) => {
                 state[action.payload.todoList.id] = [];
             })
-            .addCase(removeTodoListAc, (state, action: PayloadAction<{ todoListId: string }>) => {
+            .addCase(TodoListThunk.removeTodoLists.fulfilled, (state, action: PayloadAction<{ todoListId: string }>) => {
                 delete state[action.payload.todoListId]
 
             })
@@ -145,7 +146,7 @@ export const changeTaskStatusAndTitle = createAppAsyncThunk<
     try {
         dispatch(changeEntityStatusAc({todoListId: arg.TodoListId, id: arg.id, status: 'loading'}))
         const state = getState();
-        const task = state.TaskReducer[arg.TodoListId].find(t => t.id === arg.id);
+        const task = state.TaskReducer[arg.TodoListId].find((t:TaskType) => t.id === arg.id);
         if (!task) {
             return rejectWithValue(null)
         }

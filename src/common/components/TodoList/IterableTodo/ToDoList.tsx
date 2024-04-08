@@ -1,18 +1,17 @@
-import React, {useCallback, useEffect, useState} from 'react';
-import MyButton from "../Button/MyButton";
+import React, {useCallback} from 'react';
+import MyButton from "../../Button/MyButton";
 import "./ToDoList.style.css"
-import {AddItemForm} from "../AddItemForm/AddItemForm";
-import {EditableSpan} from "../EditableSpan/EditableSpan";
-import {Delete} from "@mui/icons-material";
+import {AddItemForm} from "../../AddItemForm/AddItemForm";
+import {EditableSpan} from "../../EditableSpan/EditableSpan";
 import {IconButton, Skeleton} from "@mui/material";
 import {useSelector} from "react-redux";
 import Task from "./Task/Task";
-import {ChoseType, TodoListDomainType} from "../../../store/slice/TodoListSlice";
-import {RootStateType, useAppDispatch} from "../../../store/store";
-import {taskThunk, TaskTypeEntity} from "../../../store/slice/TaskSlice";
-import {TaskStatuses} from "../enums/enums";
+import {TaskStatuses} from "../../enums/enums";
 import Box from "@mui/material/Box";
-import {RequestStatusType} from "../../../store/slice/AppSlice";
+import AlertDialog from "../../DialogsDelete/DialogDelete";
+import {RootStateType, useAppDispatch} from "App/store/store";
+import {taskThunk, TaskTypeEntity} from "./Task/TaskSlice";
+import {ChoseType, TodoListDomainType} from "./TodoListSlice";
 
 
 type ToDoListType = {
@@ -31,15 +30,6 @@ const ToDoList = React.memo(({removeTodoList, NameToDO, changeFilter, todoList, 
     let taskForToDOList = useSelector<RootStateType, Array<TaskTypeEntity>>(state => state.TaskReducer[todoList.id]);
 
     const isShowTasks = todoList.isShowTasks
-
-    // const [isShowTasks, setIsShowTasks] = useState(false)
-
-    // useEffect(() => {
-    //     dispatch(taskThunk.fetchTasks(todoList.id)).then(()=>{
-    //             setIsShowTasks(true)
-    //     }
-    //     )
-    // }, []);
 
 
     const removeTask = useCallback((id: string) => {
@@ -92,7 +82,11 @@ const ToDoList = React.memo(({removeTodoList, NameToDO, changeFilter, todoList, 
     const onActiveClickHandler = useCallback(() => changeFilter('active', todoList.id), [changeFilter, todoList.id]);
     const onCompletedClickHandler = useCallback(() => changeFilter('completed', todoList.id), [changeFilter, todoList.id]);
 
-
+    const removeAlertDialogCallback1 = ()=>{
+        debugger
+        removeTodo(todoList.id)
+    }
+    console.log(isShowTasks)
     return (
         <>
             <div className="toDoList">
@@ -100,16 +94,18 @@ const ToDoList = React.memo(({removeTodoList, NameToDO, changeFilter, todoList, 
                     <div className={"h3-todo"}>
                         <EditableSpan oldTitle={NameToDO} updateTasksCallbackHandler={updateTodoListsHandler}
                                       disabled={todoList.entityStatus}/>
-
-                        <IconButton onClick={() => removeTodo(todoList.id)}
+                        <IconButton
                                     disabled={todoList.entityStatus === "loading"}>
-                            <Delete color={todoList.entityStatus === "loading" ? "disabled" : "primary"}/>
+                            <AlertDialog removeAlertDialogCallback={removeAlertDialogCallback1}/>
+
                         </IconButton>
+
                     </div>
                 </h3>
                 <AddItemForm  addItem={addTasks} disabled={todoList.entityStatus}/>
                 <ul className="ul-box">
-                    {!isShowTasks ? <Box sx={{width: 200}}>
+                    {
+                        !isShowTasks ? <Box sx={{width: 200}}>
                         <Skeleton/>
                         <Skeleton animation="wave"/>
                         <Skeleton animation={false}/>

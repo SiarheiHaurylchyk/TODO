@@ -7,8 +7,9 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import {useSelector} from "react-redux";
-import {RootStateType, useAppDispatch} from "../../../store/store";
-import {logOutTc} from "../../../store/slice/AuthSlice";
+import {RootStateType, useAppDispatch} from "../../../App/store/store";
+import {logOutTc} from "../Login/AuthSlice";
+
 
 
 export default function ButtonAppBar() {

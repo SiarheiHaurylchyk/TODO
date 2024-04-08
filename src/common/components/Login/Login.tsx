@@ -4,9 +4,10 @@ import Button from "@mui/material/Button";
 import {useFormik} from "formik";
 import {useSelector} from "react-redux";
 import {Navigate} from "react-router";
-import {RootStateType, useAppDispatch} from "../../../store/store";
-import {setAppStatusAC} from "../../../store/slice/AppSlice";
-import {loginTc} from "../../../store/slice/AuthSlice";
+import {RootStateType, useAppDispatch} from "../../../App/store/store";
+import {setAppStatusAC} from "../../../App/AppSlice";
+import {loginTc} from "./AuthSlice";
+
 
 
 
@@ -43,7 +44,7 @@ export const Login = () => {
                 rememberMe:false
             },
             onSubmit: (values) => {
-                dispatch(loginTc(values))
+                dispatch(loginTc({data:values}))
             },
             validate:(values)=>{
                 const errors:FormikErrorType = {}

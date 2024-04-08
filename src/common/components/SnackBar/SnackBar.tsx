@@ -3,8 +3,9 @@ import * as React from 'react';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import {useSelector} from "react-redux";
-import {RootStateType, useAppDispatch} from "../../../store/store";
-import {setAppErrorAC} from "../../../store/slice/AppSlice";
+import {RootStateType, useAppDispatch} from "../../../App/store/store";
+import {setAppErrorAC} from "../../../App/AppSlice";
+
 
 
 export default function CustomizedSnackbars() {

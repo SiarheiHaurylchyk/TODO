@@ -2,7 +2,7 @@ import {Meta, StoryObj} from "@storybook/react";
 import {action} from "@storybook/addon-actions";
 
 import {v1} from "uuid";
-import Task from "../common/components/TodoList/Task/Task";
+import Task from "../common/components/TodoList/IterableTodo/Task/Task";
 import {TaskStatuses} from "../common/components/enums/enums";
 
 const meta:Meta<typeof Task>={

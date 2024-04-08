@@ -1,8 +1,8 @@
-import {setAppErrorAC, setAppStatusAC} from "../../store/slice/AppSlice";
 import {Dispatch} from "redux";
-import {ResponseType} from "../../features/api/TodoListAPI";
-import axios, {AxiosError} from "axios";
-import {useAppDispatch} from "../../store/store";
+import {ResponseType} from "features/api/TodoListAPI";
+import axios from "axios";
+import {setAppErrorAC, setAppStatusAC} from "App/AppSlice";
+import {useAppDispatch} from "App/store/store";
 
 
 export const errorFunctionMessage = <T>(data: ResponseType<T>, dispatch: Dispatch) => {

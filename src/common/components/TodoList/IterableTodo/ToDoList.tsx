@@ -71,7 +71,7 @@ const ToDoList = React.memo(({removeTodoList, NameToDO, changeFilter, todoList, 
     }
 
     const onDragStartHandler = (e:React.DragEvent<HTMLDivElement>,task:TaskTypeEntity) =>{
-
+        e.stopPropagation()
         setDropTaskId(task.id)
     }
     const onDragEndHandler = (e:React.DragEvent<HTMLDivElement>) =>{
@@ -82,11 +82,13 @@ const ToDoList = React.memo(({removeTodoList, NameToDO, changeFilter, todoList, 
 
     }
     const onDragOverHandler = (e:React.DragEvent<HTMLDivElement>,) =>{
+        e.stopPropagation()
         e.preventDefault()
     }
     const onDropHandler = (e:React.DragEvent<HTMLDivElement>,task:TaskTypeEntity) =>{
+        e.stopPropagation()
         e.preventDefault()
-        // dispatch(taskThunk.DragAndDropUpdateTask({todoListId:todoList.id,TaskId:task.id,dragID:dropTaskId}))
+        dispatch(taskThunk.DragAndDropUpdateTask({todoListId:todoList.id,TaskId:task.id,dragID:dropTaskId}))
 
     }
 

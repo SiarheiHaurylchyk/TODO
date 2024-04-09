@@ -182,18 +182,8 @@ async(args, thunkAPI) => {
     const todolists = getState().TodoListReducer
 
     const idToServer = DragAndDropChangeTodoId(todolists, args)
-    try {
-        const res = await todoListAPI.reorderTodolist({startDragId: args.startDragId, endShiftId: idToServer})
-        if (res.data.resultCode === 0) {
-            return args
-        } else {
-            errorFunctionMessage(res.data, dispatch)
-            return rejectWithValue(null)
-        }
-    } catch(e) {
-        networkError(e, dispatch)
-        return rejectWithValue(null)
-    }
+    const res = await todoListAPI.reorderTodolist({startDragId: args.startDragId, endShiftId: idToServer})
+    return args
 }
 )
 

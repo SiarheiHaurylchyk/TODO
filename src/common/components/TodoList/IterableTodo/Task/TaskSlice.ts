@@ -5,6 +5,7 @@ import {TasksAPI, TaskType, UpdateTaskType} from "../../../../../features/api/Ta
 import {TodoListType} from "../../../../../features/api/TodoListAPI";
 import {createAppAsyncThunk} from "../../../../utils/createAsyncThunk";
 import {networkError} from "../../../../utils/utils";
+import {DragAndDropChangeTaskId} from "common/utils/DragAndDropChangeId";
 
 
 
@@ -66,6 +67,16 @@ const slice = createSlice({
             .addCase(TodoListThunk.removeTodoLists.fulfilled, (state, action: PayloadAction<{ todoListId: string }>) => {
                 delete state[action.payload.todoListId]
 
+            })
+            .addCase(DragAndDropUpdateTask.fulfilled,(state,action)=>{
+                const {todoListId,dragID,TaskId } = action.payload;
+                const dragIndex = state[todoListId].findIndex(el => el.id === dragID);
+                const targetIndex = state[todoListId].findIndex(el => el.id === TaskId);
+
+                if (dragIndex > -1 && targetIndex > -1) {
+                    const draggedItem = state[todoListId].splice(dragIndex, 1)[0];
+                    state[todoListId].splice(targetIndex, 0, draggedItem);
+                }
             })
 
     }
@@ -199,24 +210,24 @@ export type UpdateTaskDomainType = {
 }
 
 
-// const DragAndDropUpdateTask = createAppAsyncThunk<{todoListId: string, TaskId: string, dragID:string},{todoListId: string, TaskId: string, dragID:string}>(
-//     `${slice.name}/DragAndDropUpdateTask`,
-//     async (arg, thunkAPI)=>{
-//
-//
-//     const {dispatch,getState} = thunkAPI;
-//
-//     const tasks = getState().TaskReducer[arg.todoListId]
-//
-//
-//         // const idToServer =  dragAndDropIdChanger(tasks,arg)
-//
-//
-//     // const res = await TasksAPI.DragAndDropUpdate(arg.todoListId, arg.dragID, idToServer)
-//
-//         dispatch(fetchTasks(arg.todoListId))
-//     return {todoListId:arg.todoListId,TaskId:arg.TaskId,dragID:arg.dragID}
-// })
+const DragAndDropUpdateTask = createAppAsyncThunk<{todoListId: string, TaskId: string, dragID:string},{todoListId: string, TaskId: string, dragID:string}>(
+    `${slice.name}/DragAndDropUpdateTask`,
+    async (arg, thunkAPI)=>{
 
 
-export const taskThunk = {fetchTasks, addTasks, deleteTasks,changeTaskStatusAndTitle}
+    const {dispatch,getState} = thunkAPI;
+
+    const tasks = getState().TaskReducer[arg.todoListId]
+
+
+        const idToServer =  DragAndDropChangeTaskId(tasks,arg)
+
+
+    const res = await TasksAPI.DragAndDropUpdate(arg.todoListId, arg.dragID, idToServer)
+
+
+    return {todoListId:arg.todoListId,TaskId:arg.TaskId,dragID:arg.dragID}
+})
+
+
+export const taskThunk = {fetchTasks, addTasks, deleteTasks,changeTaskStatusAndTitle,DragAndDropUpdateTask}

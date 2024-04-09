@@ -44,6 +44,12 @@ type getResponseAuth = {
     login: string
 }
 
+export type ReorderTodoListArgs = {
+    startDragId: string,
+    endShiftId: string | null
+}
+
+
 export const authApi = {
     login(data:LoginParamsType){
        return  instance.post<ResponseType<{userId:number}>>('/auth/login',data);
@@ -55,6 +61,7 @@ export const authApi = {
         return instance.delete<ResponseType>('/auth/login');
     }
 }
+
 
 
 export const todoListAPI = {
@@ -75,6 +82,10 @@ export const todoListAPI = {
         return instance.put<ResponseType>(`todo-lists/${TodoListId}`, {title: Text})
 
     },
+
+    reorderTodolist(args: ReorderTodoListArgs) {
+        return instance.put<ResponseType>(`todo-lists/${args.startDragId}/reorder`, {putAfterItemId: args.endShiftId})
+    }
 
 
 }

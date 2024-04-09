@@ -8,6 +8,10 @@ import {networkError} from "../../../../utils/utils";
 
 
 
+
+
+
+
 export type TaskTypeEntity = TaskType & {
     entityStatus: RequestStatusType
 }
@@ -63,6 +67,7 @@ const slice = createSlice({
                 delete state[action.payload.todoListId]
 
             })
+
     }
 })
 
@@ -192,6 +197,26 @@ export type UpdateTaskDomainType = {
     startDate?: string
     deadline?: string
 }
+
+
+// const DragAndDropUpdateTask = createAppAsyncThunk<{todoListId: string, TaskId: string, dragID:string},{todoListId: string, TaskId: string, dragID:string}>(
+//     `${slice.name}/DragAndDropUpdateTask`,
+//     async (arg, thunkAPI)=>{
+//
+//
+//     const {dispatch,getState} = thunkAPI;
+//
+//     const tasks = getState().TaskReducer[arg.todoListId]
+//
+//
+//         // const idToServer =  dragAndDropIdChanger(tasks,arg)
+//
+//
+//     // const res = await TasksAPI.DragAndDropUpdate(arg.todoListId, arg.dragID, idToServer)
+//
+//         dispatch(fetchTasks(arg.todoListId))
+//     return {todoListId:arg.todoListId,TaskId:arg.TaskId,dragID:arg.dragID}
+// })
 
 
 export const taskThunk = {fetchTasks, addTasks, deleteTasks,changeTaskStatusAndTitle}

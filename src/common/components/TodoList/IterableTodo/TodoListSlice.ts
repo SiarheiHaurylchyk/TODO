@@ -1,13 +1,14 @@
 import {RequestStatusType, setAppStatusAC} from "App/AppSlice";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {taskThunk} from "./Task/TaskSlice";
-import {todoListAPI, TodoListType} from "features/api/TodoListAPI";
+import {ReorderTodoListArgs, todoListAPI, TodoListType} from "features/api/TodoListAPI";
 import {createAppAsyncThunk} from "common/utils/createAsyncThunk";
 import {errorFunctionMessage, networkError} from "common/utils/utils";
-
+import {DragAndDropChangeTodoId} from "common/utils/DragAndDropChangeId";
 
 
 export type ChoseType = "all" | "completed" | "active";
+
 
 
 export type TodoListDomainType = TodoListType & {
@@ -68,7 +69,16 @@ const slice = createSlice({
                     state[index].title=action.payload.title;
                 }
             })
+            .addCase(reorderTodolistTC.fulfilled,(state,action)=>{
+                const {startDragId,endShiftId } = action.payload;
+                const dragIndex = state.findIndex(el => el.id === startDragId);
+                const targetIndex = state.findIndex(el => el.id === endShiftId);
 
+                if (dragIndex > -1 && targetIndex > -1) {
+                    const draggedItem = state.splice(dragIndex, 1)[0];
+                    state.splice(targetIndex, 0, draggedItem);
+                }
+            })
     }
 })
 
@@ -114,6 +124,7 @@ const addTodoLists = createAppAsyncThunk<{todoList:TodoListType},{title:string}>
         const {dispatch,rejectWithValue} = thunkAPI;
         try {
        const res= await todoListAPI.createTodoList(arg.title);
+
             if (res.data.resultCode===0){
                 return {todoList:res.data.data.item}
             }else {
@@ -158,4 +169,33 @@ export const updateTodoLists =  createAppAsyncThunk<{ todoListId: string, title:
     })
 
 
-export const TodoListThunk = {fetchTodoListsTC,addTodoLists,removeTodoLists,updateTodoLists}
+
+
+
+const reorderTodolistTC = createAppAsyncThunk<
+    ReorderTodoListArgs,
+    ReorderTodoListArgs
+>(
+  `  ${slice.name}/reorderTodolist`,
+async(args, thunkAPI) => {
+    const {dispatch, rejectWithValue, getState} = thunkAPI
+    const todolists = getState().TodoListReducer
+
+    const idToServer = DragAndDropChangeTodoId(todolists, args)
+    try {
+        const res = await todoListAPI.reorderTodolist({startDragId: args.startDragId, endShiftId: idToServer})
+        if (res.data.resultCode === 0) {
+            return args
+        } else {
+            errorFunctionMessage(res.data, dispatch)
+            return rejectWithValue(null)
+        }
+    } catch(e) {
+        networkError(e, dispatch)
+        return rejectWithValue(null)
+    }
+}
+)
+
+
+export const TodoListThunk = {fetchTodoListsTC,addTodoLists,removeTodoLists,updateTodoLists,reorderTodolistTC}

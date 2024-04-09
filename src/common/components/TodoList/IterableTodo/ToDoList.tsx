@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useState} from 'react';
 import MyButton from "../../Button/MyButton";
 import "./ToDoList.style.css"
 import {AddItemForm} from "../../AddItemForm/AddItemForm";
@@ -30,6 +30,8 @@ const ToDoList = React.memo(({removeTodoList, NameToDO, changeFilter, todoList, 
     let taskForToDOList = useSelector<RootStateType, Array<TaskTypeEntity>>(state => state.TaskReducer[todoList.id]);
 
     const isShowTasks = todoList.isShowTasks
+
+    const [dropTaskId, setDropTaskId] = useState("");
 
 
     const removeTask = useCallback((id: string) => {
@@ -68,13 +70,42 @@ const ToDoList = React.memo(({removeTodoList, NameToDO, changeFilter, todoList, 
         taskForToDOList = taskForToDOList.filter(el => el.status === TaskStatuses.Completed);
     }
 
+    const onDragStartHandler = (e:React.DragEvent<HTMLDivElement>,task:TaskTypeEntity) =>{
+
+        setDropTaskId(task.id)
+    }
+    const onDragEndHandler = (e:React.DragEvent<HTMLDivElement>) =>{
+
+    }
+
+    const onDragLeaveHandler = (e:React.DragEvent<HTMLDivElement>) =>{
+
+    }
+    const onDragOverHandler = (e:React.DragEvent<HTMLDivElement>,) =>{
+        e.preventDefault()
+    }
+    const onDropHandler = (e:React.DragEvent<HTMLDivElement>,task:TaskTypeEntity) =>{
+        e.preventDefault()
+        // dispatch(taskThunk.DragAndDropUpdateTask({todoListId:todoList.id,TaskId:task.id,dragID:dropTaskId}))
+
+    }
+
 
     const listItems: Array<JSX.Element> = taskForToDOList?.map(el => {
-        return todoList.entityStatus === "loading" ?
-            <Skeleton> <Task key={el.id} updateCheckHandler={updateCheckHandler} removeTask={removeTask}
-                             updateTasksHandler={updateTasksHandler} task={el}/> </Skeleton>
+        return <div key={el.id}
+            onDragStart={event => onDragStartHandler(event,el)}
+            onDragEnd={event => onDragEndHandler(event)}
+            onDragLeave={event => onDragLeaveHandler(event)}
+            onDragOver={event => onDragOverHandler(event)}
+            onDrop={event => onDropHandler(event,el)}
+            draggable={true}
+        > {todoList.entityStatus === "loading" ?
+            <Skeleton key={el.id}> <Task key={el.id} updateCheckHandler={updateCheckHandler} removeTask={removeTask}
+                                         updateTasksHandler={updateTasksHandler} task={el} todoListId={todoList.id}/>
+            </Skeleton>
             : <Task key={el.id} updateCheckHandler={updateCheckHandler} removeTask={removeTask}
-                    updateTasksHandler={updateTasksHandler} task={el}/>
+                    updateTasksHandler={updateTasksHandler} task={el} todoListId={todoList.id}/>}
+        </div>
     })
 
 
@@ -86,7 +117,9 @@ const ToDoList = React.memo(({removeTodoList, NameToDO, changeFilter, todoList, 
         debugger
         removeTodo(todoList.id)
     }
-    console.log(isShowTasks)
+
+
+
     return (
         <>
             <div className="toDoList">

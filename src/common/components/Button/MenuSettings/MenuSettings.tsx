@@ -19,7 +19,9 @@ import {logOutTc} from "../../Login/AuthSlice";
 
 import {ThemeMode} from "App/App";
 import LightOfDark from "common/LightOrDark/LightOfDark";
-import {ClickAwayListener, CssBaseline} from "@mui/material";
+import {ClickAwayListener, CssBaseline, LinearProgress} from "@mui/material";
+import AccordionUsage from "common/components/Button/MenuSettings/AccordionSettings";
+import {RequestStatusType} from "App/AppSlice";
 
 
 
@@ -30,7 +32,7 @@ type PropsType = {
 }
 
 
-const drawerWidth = 240;
+const drawerWidth = 380;
 
 const Main = styled('main', {shouldForwardProp: (prop) => prop !== 'open'})<{
     open?: boolean;
@@ -108,13 +110,13 @@ export default function PersistentDrawerLeft({themeMode,setThemeMode}:PropsType)
     const changeModeHandler = () => {
         setThemeMode(themeMode == 'light' ? 'dark' : 'light')
     }
-
+    const status = useSelector<RootStateType, RequestStatusType>(state => state.app.status)
+    const statusAdd = useSelector<RootStateType, RequestStatusType>(state => state.app.statusAdd)
 
     return (
         <ClickAwayListener onClickAway={handleDrawerClose}>
 
         <Box sx={{display: 'flex'}}>
-            {themeMode === "dark" ? <CssBaseline/> : ""}
 
             <AppBar position="fixed" open={open} >
                 <Toolbar className={"boxToolbar"} style={{display: 'flex', justifyContent: 'space-between'}}>
@@ -141,8 +143,10 @@ export default function PersistentDrawerLeft({themeMode,setThemeMode}:PropsType)
                                 <Button onClick={logOut} color="inherit">Log out</Button>}</div>
                         </div>
 
-
                 </Toolbar>
+                {status === "loading" && <LinearProgress color="secondary"/>}
+                {statusAdd === "loading" && <LinearProgress color="secondary"/>}
+
             </AppBar>
 
             <Drawer
@@ -159,7 +163,7 @@ export default function PersistentDrawerLeft({themeMode,setThemeMode}:PropsType)
                 open={open}
             >
                 <DrawerHeader>
-                    <div style={{fontSize:"18px"}}>Menu</div>
+                    <div style={{fontSize:"18px",paddingRight:"35%"}}>Menu</div>
                     <IconButton onClick={handleDrawerClose}>
                         {theme.direction === 'ltr' ? <ChevronLeftIcon/> : <ChevronRightIcon/>}
                     </IconButton>
@@ -168,16 +172,17 @@ export default function PersistentDrawerLeft({themeMode,setThemeMode}:PropsType)
                 <Divider/>
                 <List>
 
-                        <ListItemButton>
-                            <Settings/>
-                            <div>Settings</div>
+                        <ListItemButton disableRipple={true}>
+                            <AccordionUsage themeMode={themeMode}/>
                         </ListItemButton>
 
                 </List>
                 <Divider/>
 
             </Drawer>
+
         </Box>
+
         </ClickAwayListener>
     );
 }

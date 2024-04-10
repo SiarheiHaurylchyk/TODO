@@ -13,8 +13,7 @@ const LightOfDark = ({themeMode,changeModeHandler}:LightOfDark) => {
     localStorage.setItem("theme",locStore)
     return (
         <div>
-            {themeMode === "light"?< LightModeIcon onClick={changeModeHandler} sx={{marginRight:"20px"}} />: <Brightness3Icon onClick={changeModeHandler} sx={{marginRight:"20px"}}/>}
-
+            {themeMode === "light"?< LightModeIcon onClick={changeModeHandler} sx={{marginRight:"20px"}} />: <Brightness3Icon onClick={changeModeHandler} sx={{marginRight:"20px"}} color="secondary"/>}
         </div>
     );
 };

@@ -38,6 +38,7 @@ const slice = createSlice({
             state.statusTask=action.payload.status
         },
         setStatusAddAC(state,action:PayloadAction<{status:RequestStatusType}>){
+            console.log(state.statusAdd)
             state.statusAdd=action.payload.status
         },
         setAppErrorAC(state, action:PayloadAction<{error: string|null}>){

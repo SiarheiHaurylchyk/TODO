@@ -1,4 +1,4 @@
-import {RequestStatusType, setAppStatusAC} from "App/AppSlice";
+import {RequestStatusType, setAppStatusAC, setStatusAddAC} from "App/AppSlice";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {taskThunk} from "./Task/TaskSlice";
 import {ReorderTodoListArgs, todoListAPI, TodoListType} from "features/api/TodoListAPI";
@@ -122,10 +122,12 @@ const addTodoLists = createAppAsyncThunk<{todoList:TodoListType},{title:string}>
     `${slice.name}/addTodoLists`,
     async (arg, thunkAPI) => {
         const {dispatch,rejectWithValue} = thunkAPI;
+        dispatch(setStatusAddAC({status: "loading"}))
         try {
        const res= await todoListAPI.createTodoList(arg.title);
 
             if (res.data.resultCode===0){
+                dispatch(setStatusAddAC({status:"succeeded"}))
                 return {todoList:res.data.data.item}
             }else {
                 errorFunctionMessage<{item:TodoListType}>(res.data,dispatch)
@@ -137,6 +139,7 @@ const addTodoLists = createAppAsyncThunk<{todoList:TodoListType},{title:string}>
             networkError(e,dispatch)
             return rejectWithValue(null)
         }
+
 
     })
 

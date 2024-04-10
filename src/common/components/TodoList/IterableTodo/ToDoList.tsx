@@ -116,7 +116,6 @@ const ToDoList = React.memo(({removeTodoList, NameToDO, changeFilter, todoList, 
     const onCompletedClickHandler = useCallback(() => changeFilter('completed', todoList.id), [changeFilter, todoList.id]);
 
     const removeAlertDialogCallback1 = ()=>{
-        debugger
         removeTodo(todoList.id)
     }
 

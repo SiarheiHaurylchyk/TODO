@@ -13,7 +13,7 @@ import {useSelector} from "react-redux";
 import AnchorTemporaryDrawer from "../common/components/Button/MenuSettings/MenuSettings";
 import {RootStateType} from "./store/store";
 import {RequestStatusType} from "./AppSlice";
-
+import { grey,yellow } from '@mui/material/colors';
 
 export type ThemeMode = 'dark' | 'light'
 
@@ -26,7 +26,7 @@ const App = React.memo(() => {
 
     const [themeMode, setThemeMode] = useState<ThemeMode>(initThem ? initThem : "light")
 
-    const status = useSelector<RootStateType, RequestStatusType>(state => state.app.status)
+
 
     const isInitiolized = useSelector<RootStateType, boolean>(state => state.app.setInitiolized)
 
@@ -42,24 +42,26 @@ const App = React.memo(() => {
         palette: {
             mode: themeMode === 'light' ? 'light' : 'dark',
             primary: {
-                main: '#087EA4',
+                main: '#6205d2',
             },
+            secondary: yellow,
         },
     })
 
 
     return (
 
-        <ThemeProvider theme={themeGlobal}>
+
+        <ThemeProvider theme={themeGlobal} >
         <BrowserRouter>
-            <div className="App">
-                {/*<ButtonAppBar/>*/}
-                {status === "loading" && <LinearProgress color="secondary"/>}
+            <div className="App" >
 
                 <AnchorTemporaryDrawer themeMode={themeMode} setThemeMode={setThemeMode}/>
-
                 <CustomizedSnackbars/>
+
+
                 <Container fixed>
+
                     <Grid container>
                         <Grid container spacing={3} mt={"10%"} justifyContent={"center"}>
                             <Routes>

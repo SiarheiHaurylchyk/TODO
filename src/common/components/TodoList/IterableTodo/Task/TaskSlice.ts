@@ -10,9 +10,6 @@ import {DragAndDropChangeTaskId} from "common/utils/DragAndDropChangeId";
 
 
 
-
-
-
 export type TaskTypeEntity = TaskType & {
     entityStatus: RequestStatusType
 }

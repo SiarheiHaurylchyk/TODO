@@ -28,7 +28,6 @@ export default function AccordionUsage({themeMode}:AccordionUsageProps) {
 
     useEffect(() => {
         const getStore = localStorage.getItem("background");
-        const getStoreTheme = localStorage.getItem("theme");
         const background = getStore ? `url(${getStore})` : "white"
         document.body.style.background = background;
         if (clearBackgroundStore){

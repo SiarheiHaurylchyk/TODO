@@ -17,8 +17,8 @@ import { grey,yellow } from '@mui/material/colors';
 
 export type ThemeMode = 'dark' | 'light'
 
-let initThem = JSON.parse(localStorage.getItem("theme")||"none");
 
+let initThem =  localStorage.getItem("theme")===null ? localStorage.setItem("theme","light") : JSON.parse(localStorage.getItem("theme")||"none");
 
 
 const App = React.memo(() => {

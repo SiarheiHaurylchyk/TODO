@@ -24,6 +24,7 @@ const slice = createSlice({
                 state.isLoginIn=action.payload.value
             })
 
+
     }
 })
 

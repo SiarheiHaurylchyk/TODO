@@ -34,7 +34,7 @@ export const authAction = slice.actions
 
 
 
-export const loginTc = createAppAsyncThunk<{value:boolean},{data:LoginParamsType}>(
+const loginTc = createAppAsyncThunk<{value:boolean},{data:LoginParamsType}>(
     `${slice.name}/loginTc`,
     async (arg, thunkAPI)=>{
         const {dispatch,rejectWithValue} = thunkAPI;
@@ -50,6 +50,7 @@ export const loginTc = createAppAsyncThunk<{value:boolean},{data:LoginParamsType
                     }
                     else {
                         errorFunctionMessage(res.data,dispatch)
+                        debugger
                         return rejectWithValue(null)
                     }
         }
@@ -62,7 +63,7 @@ export const loginTc = createAppAsyncThunk<{value:boolean},{data:LoginParamsType
 
 
 
-export const logOutTc = createAppAsyncThunk<{value:boolean}>(
+ const logOutTc = createAppAsyncThunk<{value:boolean}>(
     `${slice.name}/loginTc`,
     async (arg, thunkAPI)=> {
         const {dispatch, rejectWithValue} = thunkAPI;
@@ -87,4 +88,4 @@ export const logOutTc = createAppAsyncThunk<{value:boolean}>(
     })
 
 
-export  const AuthSliceThunk = {loginTc}
+export  const AuthSliceThunk = {loginTc,logOutTc}

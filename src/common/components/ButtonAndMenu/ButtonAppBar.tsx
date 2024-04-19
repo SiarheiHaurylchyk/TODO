@@ -8,7 +8,8 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import {useSelector} from "react-redux";
 import {RootStateType, useAppDispatch} from "../../../App/store/store";
-import {logOutTc} from "../Login/AuthSlice";
+import {AuthSliceThunk} from "common/components/Login/AuthSlice";
+
 
 
 
@@ -21,7 +22,7 @@ export default function ButtonAppBar() {
     }
 
     const logOut = ()=>{
-       dispatch(logOutTc())
+       dispatch(AuthSliceThunk.logOutTc())
     }
 
     return (

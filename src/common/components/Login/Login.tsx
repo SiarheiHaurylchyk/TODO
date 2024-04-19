@@ -6,7 +6,7 @@ import {useSelector} from "react-redux";
 import {Navigate} from "react-router";
 import {RootStateType, useAppDispatch} from "../../../App/store/store";
 import {setAppStatusAC} from "../../../App/AppSlice";
-import {loginTc} from "./AuthSlice";
+import {AuthSliceThunk} from "./AuthSlice";
 
 
 
@@ -44,7 +44,15 @@ export const Login = () => {
                 rememberMe:false
             },
             onSubmit: (values) => {
-                dispatch(loginTc({data:values}))
+                debugger
+                dispatch(AuthSliceThunk.loginTc({data:values}))
+                    .unwrap()
+                    .then((res)=>{
+                    debugger
+                    })
+                    .catch((err)=>{
+                        debugger
+                    })
             },
             validate:(values)=>{
                 const errors:FormikErrorType = {}
@@ -91,7 +99,7 @@ export const Login = () => {
                             <TextField label="Email" margin="normal" {...formik.getFieldProps("email")}/>
                             {formik.touched.email && formik.errors.email && <div>{formik.errors.email}</div>}
                             <TextField type="password" label="Password" margin="normal"  {...formik.getFieldProps("password")}/>
-                            {formik.touched.password && formik.errors.password && <div>{formik.errors.password}</div>}
+                            {formik.errors.password && <div>{formik.errors.password}</div>}
                             <FormControlLabel label={'Remember me'} control={<Checkbox/>} checked={formik.values.rememberMe} {...formik.getFieldProps("rememberMe")}/>
                             <Button type={'submit'} variant={'contained'} color={'primary'}>
                                 Login

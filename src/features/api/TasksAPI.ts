@@ -31,6 +31,11 @@ export type UpdateTaskType = {
     deadline: string
 }
 
+type argType = {
+    todoListId: string,
+    TaskId: string,
+    putAfterItemId:string|null
+}
 
 export const TasksAPI = {
     GetTasks(TodoListId: string) {
@@ -49,7 +54,7 @@ export const TasksAPI = {
     UpdateTask(TodoListId: string, TaskId: string, model:UpdateTaskType) {
         return instance.put<ResponseType>(`todo-lists/${TodoListId}/tasks/${TaskId}`, model)
     },
-    DragAndDropUpdate(todoListId: string, TaskId: string|null, putAfterItemId:string|null) {
-        return instance.put<ResponseType>(`todo-lists/${todoListId}/tasks/${TaskId}/reorder`, {putAfterItemId:putAfterItemId})
+    DragAndDropUpdate(arg:argType) {
+        return instance.put<ResponseType>(`todo-lists/${arg.todoListId}/tasks/${arg.TaskId}/reorder`, {putAfterItemId:arg.putAfterItemId})
     }
 }

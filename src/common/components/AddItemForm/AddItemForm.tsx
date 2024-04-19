@@ -48,6 +48,7 @@ export function AddItemForm({addItem,disabled}:CustomizedInputBaseProps) {
     return (
         <Paper
             component="form"
+            onSubmit={(e) => e.preventDefault()}
             sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 280 }}
         >
             <InputBase
@@ -55,6 +56,7 @@ export function AddItemForm({addItem,disabled}:CustomizedInputBaseProps) {
                 placeholder="Enter Text"
                 onChange={onChangeHandler}
                 value={newTask}
+                onKeyDown={handlePress}
             />
 
             <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />

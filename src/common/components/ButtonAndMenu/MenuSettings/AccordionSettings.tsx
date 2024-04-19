@@ -7,7 +7,6 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Button from '@mui/material/Button';
 import {Settings} from "@mui/icons-material";
 import PhotoCameraBackOutlinedIcon from '@mui/icons-material/PhotoCameraBackOutlined';
-import {ThemeMode} from "App/App";
 import img2 from "App/background/assets-addItem-Black1.jpg"
 import img3 from "App/background/belaia-Black2.jpg"
 import img7 from "App/background/wing-white2.jpg"
@@ -18,13 +17,11 @@ import img1 from "App/background/wood-white1.jpg"
 import img9 from "App/background/white-black3.jpg"
 import img10 from "../../../../App/background/src.jpeg"
 
-type AccordionUsageProps ={
-    themeMode: ThemeMode,
-}
 
-export default function AccordionUsage({themeMode}:AccordionUsageProps) {
+export default function AccordionUsage() {
     const [stateImage, setStateImage] = useState("");
     const [clearBackgroundStore, setClearBackgroundStore] = useState(false);
+
 
     useEffect(() => {
         const getStore = localStorage.getItem("background");
@@ -33,12 +30,11 @@ export default function AccordionUsage({themeMode}:AccordionUsageProps) {
         if (clearBackgroundStore){
             localStorage.removeItem("background")
             setClearBackgroundStore(false)
+            setStateImage("")
         }
     }, [stateImage, clearBackgroundStore]);
 
 
-
-    console.log(clearBackgroundStore)
 
     const onChangeImageHandler = (e: React.MouseEvent<HTMLDivElement>) => {
         const target = e.target as HTMLImageElement;
@@ -46,6 +42,7 @@ export default function AccordionUsage({themeMode}:AccordionUsageProps) {
             setStateImage(`url(${target.src})`);
             localStorage.setItem("background",target.src)
         }
+
     }
 
     const onClickClearLocalStorage = () =>{
@@ -85,7 +82,7 @@ export default function AccordionUsage({themeMode}:AccordionUsageProps) {
                         <img
                             src={img1}
                             alt=""
-                            width={"150px"} height={"150px"} onClick={(e) => onChangeImageHandler(e)}/>
+                            width={"150px"} height={"150px"} />
                         <img
                             src={img2}
                             alt=""
@@ -115,7 +112,6 @@ export default function AccordionUsage({themeMode}:AccordionUsageProps) {
                         <img
                             src={img10}
                             alt="" width={"150px"} height={"150px"}/>
-
 
                     </div>
                 </AccordionDetails>

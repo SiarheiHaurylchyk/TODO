@@ -1,5 +1,6 @@
-import React, {useCallback, useState} from "react";
-import {Grid, LinearProgress, Paper} from "@mui/material";
+import React, {useCallback, useEffect, useState} from "react";
+import {ClassNameMap, createStyles, Grid, Pagination, Paper} from "@mui/material";
+import { makeStyles } from '@material-ui/core/styles';
 import ToDoList from "./ToDoList";
 import {useSelector} from "react-redux";
 import {AddItemForm} from "../../AddItemForm/AddItemForm";
@@ -11,21 +12,29 @@ import {
     TodoListDomainType,
     TodoListThunk,
 } from "./TodoListSlice";
-import {RequestStatusType} from "App/AppSlice";
+import {useSearchParams} from "react-router-dom";
+import {useTheme} from "@mui/material/styles";
+import {CSSProperties} from "@mui/material/styles/createMixins";
 
 
 export const IterableTodo = () => {
 
+
     const dispatch = useAppDispatch();
+
+    const [searchParams, setSearchParams] = useSearchParams();
 
     const todoLists = useSelector<RootStateType, Array<TodoListDomainType>>(state => state.TodoListReducer);
 
     const isLoginIn = useSelector<RootStateType,boolean>(state =>state.auth.isLoginIn );
 
+    const theme = useTheme()
+
 
 
     const addTodoList = useCallback((text: string) => {
         dispatch(TodoListThunk.addTodoLists({title:text}))
+
     }, [dispatch])
 
 
@@ -44,6 +53,37 @@ export const IterableTodo = () => {
 
     const [dropId, setDropId] = useState("");
 
+    const useStyles = makeStyles(() =>
+        createStyles({
+            ul: {
+                '& .MuiPaginationItem-root': {
+                    backgroundColor: '#151515',
+                    color: 'white',
+
+                    '&.Mui-selected': {
+                        backgroundColor: '#6c00ea',
+                    },
+                } as CSSProperties,
+            },
+        })
+    );
+    const classes: ClassNameMap<string> = useStyles();
+
+    const useStyles1 = makeStyles(() =>
+        createStyles({
+            ul: {
+                '& .MuiPaginationItem-root': {
+                    backgroundColor: '#ffffff',
+                    color: '#000000',
+
+                    '&.Mui-selected': {
+                        backgroundColor: '#6c00ea',
+                    },
+                } as CSSProperties,
+            },
+        })
+    );
+    const classes1: ClassNameMap<string> = useStyles1();
 
     if (!isLoginIn) {
         return <Navigate to={'/login'} />
@@ -66,14 +106,15 @@ export const IterableTodo = () => {
         dispatch(TodoListThunk.reorderTodolistTC({endShiftId: endShiftId, startDragId: dropId}))
     }
 
+
+
     return (
-        <>
-
-            <Grid item xs={12} mt={"30px"} display={"flex"} justifyContent={"center"}>
-
+        <div >
+        <Grid container xs={12} gap={"20px"} display={"flex"} justifyContent={"center"}>
+            <Grid item xs={12} mt={"10px"} display={"flex"} justifyContent={"center"}>
                 <AddItemForm addItem={addTodoList}/>
             </Grid>
-            {todoLists.map(tl => (
+            {todoLists.filter(e=>searchParams.get("search")?e.title.includes(searchParams.get("search")??""):e).map(tl => (
                 <Grid key={tl.id} item
                       draggable={true}
                       onDragStart={(e) => dragStartHandler(e, tl.id)}
@@ -93,6 +134,19 @@ export const IterableTodo = () => {
                     </Paper>
                 </Grid>
             ))}
-        </>
+        </Grid>
+            <div style={{display:"flex",justifyContent:"center",marginTop:"20px"}}>
+            {
+                theme.palette.mode === "dark" ?
+                    <div className={classes.ul}>
+                        <Pagination count={6} variant="outlined" shape="circular"/>
+                    </div>
+                    :
+                    <div className={classes1.ul}>
+                        <Pagination count={6} variant="outlined" shape="circular"/>
+                    </div>
+            }
+            </div>
+        </div>
     );
 };

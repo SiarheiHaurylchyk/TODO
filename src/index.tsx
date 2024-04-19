@@ -4,6 +4,7 @@ import './index.css';
 import {Provider} from "react-redux";
 import App from "./App/App";
 import {store} from "./App/store/store";
+import {ThemeTogglerHOC} from "App/ThemeTogglerHOC/ThemeTogglerHOC";
 
 
 const root = ReactDOM.createRoot(
@@ -11,7 +12,9 @@ const root = ReactDOM.createRoot(
 );
 root.render(
       <Provider store={store}>
+          <ThemeTogglerHOC>
         <App />
+          </ThemeTogglerHOC>
       </Provider>
 );
 

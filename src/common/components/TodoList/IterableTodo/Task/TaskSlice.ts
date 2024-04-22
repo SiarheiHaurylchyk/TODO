@@ -212,19 +212,19 @@ const DragAndDropUpdateTask = createAppAsyncThunk<{todoListId: string, TaskId: s
     async (arg, thunkAPI)=>{
 
 
-    const {dispatch,getState} = thunkAPI;
+        const {dispatch,getState} = thunkAPI;
 
-    const tasks = getState().TaskReducer[arg.todoListId]
+        const tasks = getState().TaskReducer[arg.todoListId]
 
 
         const idToServer =  DragAndDropChangeTaskId(tasks,arg)
 
-        // arg.todoListId, arg.dragID, idToServer
-    const res = await TasksAPI.DragAndDropUpdate({todoListId:arg.todoListId,TaskId:arg.TaskId,putAfterItemId:idToServer})
+
+        const res = await TasksAPI.DragAndDropUpdate({todoListId:arg.todoListId,TaskId:arg.dragID,putAfterItemId:idToServer})
 
 
-    return {todoListId:arg.todoListId,TaskId:arg.TaskId,dragID:arg.dragID}
-})
+        return {todoListId:arg.todoListId,TaskId:arg.TaskId,dragID:arg.dragID}
+    })
 
 
 export const taskThunk = {fetchTasks, addTasks, deleteTasks,changeTaskStatusAndTitle,DragAndDropUpdateTask}

@@ -55,6 +55,7 @@ export const TasksAPI = {
         return instance.put<ResponseType>(`todo-lists/${TodoListId}/tasks/${TaskId}`, model)
     },
     DragAndDropUpdate(arg:argType) {
+        console.log(arg)
         return instance.put<ResponseType>(`todo-lists/${arg.todoListId}/tasks/${arg.TaskId}/reorder`, {putAfterItemId:arg.putAfterItemId})
     }
 }

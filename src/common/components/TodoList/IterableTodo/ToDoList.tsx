@@ -71,9 +71,8 @@ const ToDoList = React.memo(({removeTodoList, NameToDO, changeFilter, todoList, 
         taskForToDOList = taskForToDOList.filter(el => el.status === TaskStatuses.Completed);
     }
 
-    const onDragStartHandler = (e:React.DragEvent<HTMLDivElement>,task:TaskTypeEntity,todoList:TodoListDomainType) =>{
+    const onDragStartHandler = (e:React.DragEvent<HTMLDivElement>,task:TaskTypeEntity) =>{
         e.stopPropagation()
-        console.log(task.id,todoList.id)
         setDropTaskId(task.id)
     }
     const onDragEndHandler = (e:React.DragEvent<HTMLDivElement>,task:TaskTypeEntity) =>{
@@ -90,7 +89,6 @@ const ToDoList = React.memo(({removeTodoList, NameToDO, changeFilter, todoList, 
     const onDropHandler = (e:React.DragEvent<HTMLDivElement>,task:TaskTypeEntity,todoList:TodoListDomainType) =>{
         e.stopPropagation()
         e.preventDefault()
-        console.log("END",task.id,todoList.id)
         dispatch(taskThunk.DragAndDropUpdateTask({todoListId:todoList.id,TaskId:task.id,dragID:dropTaskId}))
 
     }
@@ -98,7 +96,7 @@ const ToDoList = React.memo(({removeTodoList, NameToDO, changeFilter, todoList, 
 
     const listItems: Array<JSX.Element> = taskForToDOList?.map(el => {
         return <div key={el.id}
-            onDragStart={event => onDragStartHandler(event,el,todoList)}
+            onDragStart={event => onDragStartHandler(event,el)}
             onDragEnd={event => onDragEndHandler(event,el)}
             onDragLeave={event => onDragLeaveHandler(event)}
             onDragOver={event => onDragOverHandler(event)}

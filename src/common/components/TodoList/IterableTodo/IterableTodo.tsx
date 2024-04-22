@@ -71,6 +71,8 @@ export const IterableTodo = () => {
         },
     };
 
+
+
     if (!isLoginIn) {
         return <Navigate to={'/login'} />
     }
@@ -101,7 +103,7 @@ export const IterableTodo = () => {
                 <Grid item xs={12} mt={"10px"} display={"flex"} justifyContent={"center"}>
                     <AddItemForm addItem={addTodoList}/>
                 </Grid>
-                {displayedTodoLists.filter((e, id) => id !== pageCount).filter(e => searchParams.get("searchQ") ? e.title.includes(searchParams.get("searchQ") ?? "") : e).map(tl => (
+                {displayedTodoLists.filter((e, id) => id !== pageCount).filter(e => searchParams.get("search") ? e.title.includes(searchParams.get("search") ?? "") : e).map(tl => (
                     <Grid key={tl.id} item
                           draggable={true}
                           onDragStart={(e) => dragStartHandler(e, tl.id)}

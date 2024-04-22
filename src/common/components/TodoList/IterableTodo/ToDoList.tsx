@@ -12,6 +12,7 @@ import AlertDialog from "../../DialogsDelete/DialogDelete";
 import {RootStateType, useAppDispatch} from "App/store/store";
 import {taskThunk, TaskTypeEntity} from "./Task/TaskSlice";
 import {ChoseType, TodoListDomainType} from "./TodoListSlice";
+import {Login} from "../../Login/Login";
 
 
 type ToDoListType = {
@@ -70,11 +71,12 @@ const ToDoList = React.memo(({removeTodoList, NameToDO, changeFilter, todoList, 
         taskForToDOList = taskForToDOList.filter(el => el.status === TaskStatuses.Completed);
     }
 
-    const onDragStartHandler = (e:React.DragEvent<HTMLDivElement>,task:TaskTypeEntity) =>{
+    const onDragStartHandler = (e:React.DragEvent<HTMLDivElement>,task:TaskTypeEntity,todoList:TodoListDomainType) =>{
         e.stopPropagation()
+        console.log(task.id,todoList.id)
         setDropTaskId(task.id)
     }
-    const onDragEndHandler = (e:React.DragEvent<HTMLDivElement>) =>{
+    const onDragEndHandler = (e:React.DragEvent<HTMLDivElement>,task:TaskTypeEntity) =>{
 
     }
 
@@ -85,9 +87,10 @@ const ToDoList = React.memo(({removeTodoList, NameToDO, changeFilter, todoList, 
         e.stopPropagation()
         e.preventDefault()
     }
-    const onDropHandler = (e:React.DragEvent<HTMLDivElement>,task:TaskTypeEntity) =>{
+    const onDropHandler = (e:React.DragEvent<HTMLDivElement>,task:TaskTypeEntity,todoList:TodoListDomainType) =>{
         e.stopPropagation()
         e.preventDefault()
+        console.log("END",task.id,todoList.id)
         dispatch(taskThunk.DragAndDropUpdateTask({todoListId:todoList.id,TaskId:task.id,dragID:dropTaskId}))
 
     }
@@ -95,11 +98,11 @@ const ToDoList = React.memo(({removeTodoList, NameToDO, changeFilter, todoList, 
 
     const listItems: Array<JSX.Element> = taskForToDOList?.map(el => {
         return <div key={el.id}
-            onDragStart={event => onDragStartHandler(event,el)}
-            onDragEnd={event => onDragEndHandler(event)}
+            onDragStart={event => onDragStartHandler(event,el,todoList)}
+            onDragEnd={event => onDragEndHandler(event,el)}
             onDragLeave={event => onDragLeaveHandler(event)}
             onDragOver={event => onDragOverHandler(event)}
-            onDrop={event => onDropHandler(event,el)}
+            onDrop={event => onDropHandler(event,el,todoList)}
             draggable={true}
         > {todoList.entityStatus === "loading" ?
             <Skeleton key={el.id}> <Task key={el.id} updateCheckHandler={updateCheckHandler} removeTask={removeTask}

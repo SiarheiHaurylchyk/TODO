@@ -1,14 +1,11 @@
 import React, {useEffect} from "react";
 import {Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, Grid, Paper, TextField} from "@mui/material";
 import Button from "@mui/material/Button";
-import {useFormik} from "formik";
 import {useSelector} from "react-redux";
 import {Navigate} from "react-router";
-import {RootStateType, useAppDispatch} from "../../../App/store/store";
+import {RootStateType} from "../../../App/store/store";
 import {setAppStatusAC} from "../../../App/AppSlice";
-import {AuthSliceThunk} from "./AuthSlice";
-
-
+import {useLogin} from "./Lib/useLogin";
 
 
 export type FormikErrorType = {
@@ -19,12 +16,11 @@ export type FormikErrorType = {
 
 export const Login = () => {
 
-        const dispatch = useAppDispatch();
 
-        const isLoginIn = useSelector<RootStateType,boolean>(state => state.auth.isLoginIn)
+    const isLoginIn = useSelector<RootStateType,boolean>(state => state.auth.isLoginIn)
 
+    const {formik,dispatch} = useLogin()
 
-    console.log("LOGIN-LOG")
     useEffect(() => {
         console.log("LOGIN-USEEFFECT")
         return ()=>{
@@ -37,40 +33,7 @@ export const Login = () => {
     }, []);
 
     console.log(isLoginIn)
-        const formik = useFormik({
-            initialValues: {
-                email: '',
-                password:'',
-                rememberMe:false
-            },
-            onSubmit: (values) => {
-                debugger
-                dispatch(AuthSliceThunk.loginTc({data:values}))
-                    .unwrap()
-                    .then((res)=>{
-                    debugger
-                    })
-                    .catch((err)=>{
-                        debugger
-                    })
-            },
-            validate:(values)=>{
-                const errors:FormikErrorType = {}
 
-                if (!values.email) {
-                    errors.email = 'Required';
-                } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-                    errors.email = 'Invalid email address';
-                }
-
-                if (!values.password) {
-                    errors.password = 'Required';
-                } else if (values.password.length < 4) {
-                    errors.password = 'Must be 4 characters or more';
-                }
-                return errors;
-            }
-        });
 
         if (isLoginIn){
             return <Navigate to="/" />;

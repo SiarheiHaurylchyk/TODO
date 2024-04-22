@@ -47,6 +47,8 @@ type getResponseAuth = {
 export type ReorderTodoListArgs = {
     startDragId: string,
     endShiftId: string | null
+    startTodoDragId?: string,
+    endTodoShiftId?: string | null
 }
 
 

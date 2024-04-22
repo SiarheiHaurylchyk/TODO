@@ -49,7 +49,7 @@ export function AddItemForm({addItem,disabled}:CustomizedInputBaseProps) {
         <Paper
             component="form"
             onSubmit={(e) => e.preventDefault()}
-            sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 280 }}
+            sx={{ p: '2px 4px', display: 'flex', alignItems: 'center' }}
         >
             <InputBase
                 sx={{ ml: 1, flex: 1 }}

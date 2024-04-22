@@ -27,5 +27,5 @@ export const networkError = (err:unknown,dispatch:useAppDispatch) =>{
     }
 
     dispatch(setAppErrorAC({error:errorMessage}))
-    dispatch(setAppStatusAC({status:"failed"}))
+    // dispatch(setAppStatusAC({status:"failed"}))
 }

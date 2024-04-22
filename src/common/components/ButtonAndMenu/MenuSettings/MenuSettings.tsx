@@ -72,7 +72,7 @@ const DrawerHeader = styled('div')(({theme}) => ({
     justifyContent: 'flex-end',
 }));
 
-export default function PersistentDrawerLeft() {
+export function PersistentDrawerLeft(props:{children:React.ReactNode}) {
 
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
@@ -90,9 +90,12 @@ export default function PersistentDrawerLeft() {
     const statusAdd = useSelector<RootStateType, RequestStatusType>(state => state.app.statusAdd)
 
     return (
-        <ClickAwayListener onClickAway={handleDrawerClose}>
+        <>
+
 
             <Box sx={{display: 'flex'}}>
+                <ClickAwayListener onClickAway={handleDrawerClose}>
+                <div>
 
                 <AppBar position="fixed" open={open}>
                     <Toolbar className={"boxToolbar"} style={{display: 'flex', justifyContent: 'space-between'}}>
@@ -122,7 +125,7 @@ export default function PersistentDrawerLeft() {
 
                     </Toolbar>
                     {status === "loading" && <LinearProgress color="secondary"/>}
-                    {statusAdd === "loading" && <LinearProgress color="secondary"/>}
+                    {statusAdd === "loading" && <LinearProgress color="primary"/>}
 
                 </AppBar>
 
@@ -159,9 +162,14 @@ export default function PersistentDrawerLeft() {
                         <BasicDateCalendar/>
                     </div>
                 </Drawer>
-
+                </div>
+        </ClickAwayListener>
+                <Main > {props.children} </Main>
             </Box>
 
-        </ClickAwayListener>
+
+
+
+        </>
     );
 }

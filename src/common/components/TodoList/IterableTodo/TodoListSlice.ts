@@ -79,6 +79,7 @@ const slice = createSlice({
                     state.splice(targetIndex, 0, draggedItem);
                 }
             })
+
     }
 })
 
@@ -122,12 +123,12 @@ const addTodoLists = createAppAsyncThunk<{todoList:TodoListType},{title:string}>
     `${slice.name}/addTodoLists`,
     async (arg, thunkAPI) => {
         const {dispatch,rejectWithValue} = thunkAPI;
-        dispatch(setStatusAddAC({status: "loading"}))
+        // dispatch(setStatusAddAC({status: "loading"}))
         try {
        const res= await todoListAPI.createTodoList(arg.title);
 
             if (res.data.resultCode===0){
-                dispatch(setStatusAddAC({status:"succeeded"}))
+                // dispatch(setStatusAddAC({status:"succeeded"}))
                 return {todoList:res.data.data.item}
             }else {
                 errorFunctionMessage<{item:TodoListType}>(res.data,dispatch)
@@ -149,12 +150,12 @@ export const removeTodoLists = createAppAsyncThunk<{todoListId:string}, { todoLi
     async (arg, thunkAPI) => {
         const {dispatch, rejectWithValue} = thunkAPI;
         dispatch(setEntityStatusAc({id: arg.todoListId, status: "loading"}))
-        dispatch(setAppStatusAC({status: "loading"}))
+        // dispatch(setAppStatusAC({status: "loading"}))
         const res = await todoListAPI.DeleteTodoList(arg.todoListId)
 
 
         dispatch(setEntityStatusAc({id: arg.todoListId, status: "succeeded"}))
-        dispatch(setAppStatusAC({status: "succeeded"}))
+        // dispatch(setAppStatusAC({status: "succeeded"}))
         return {todoListId: arg.todoListId}
     })
 

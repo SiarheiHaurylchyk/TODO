@@ -5,6 +5,8 @@ import {Provider} from "react-redux";
 import App from "./App/App";
 import {store} from "./App/store/store";
 import {ThemeTogglerHOC} from "App/ThemeTogglerHOC/ThemeTogglerHOC";
+import {PersistentDrawerLeft} from "./common/components/ButtonAndMenu/MenuSettings/MenuSettings";
+import {BrowserRouter} from "react-router-dom";
 
 
 const root = ReactDOM.createRoot(
@@ -12,9 +14,13 @@ const root = ReactDOM.createRoot(
 );
 root.render(
       <Provider store={store}>
+          <BrowserRouter>
           <ThemeTogglerHOC>
-        <App />
+              <PersistentDrawerLeft ><App /></PersistentDrawerLeft>
+
           </ThemeTogglerHOC>
+          </BrowserRouter>
+
       </Provider>
 );
 

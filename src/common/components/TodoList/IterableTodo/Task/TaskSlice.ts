@@ -91,10 +91,10 @@ const fetchTasks = createAppAsyncThunk<{ todoListId: string, task: TaskType[]},s
     async (todoListId: string, thunkAPI) => {
     const {dispatch, rejectWithValue} = thunkAPI;
     try {
-        dispatch(setStatusTaskAC({status: "loading"}));
+        // dispatch(setStatusTaskAC({status: "loading"}));
         const res = await TasksAPI.GetTasks(todoListId);
         const task = res.data.items;
-        dispatch(setStatusTaskAC({status: "succeeded"}));
+        // dispatch(setStatusTaskAC({status: "succeeded"}));
         return {task, todoListId}
     } catch (e) {
         networkError(e, dispatch)
@@ -136,10 +136,10 @@ const addTasks = createAppAsyncThunk<{ task: TaskTypeEntity }, {
 const deleteTasks = createAppAsyncThunk<{todoListId:string,id:string}, {todoListId:string,id:string}>(`${slice.name}/deleteTasks`, async (arg, thunkAPI) => {
     const {dispatch, rejectWithValue} = thunkAPI;
     try {
-        dispatch(setStatusAddAC({status: "loading"}))
+        // dispatch(setStatusAddAC({status: "loading"}))
         dispatch(changeEntityStatusAc({status: "loading", todoListId: arg.todoListId, id: arg.id}))
         await TasksAPI.DeleteTasks(arg.todoListId, arg.id)
-        dispatch(setStatusAddAC({status: "succeeded"}));
+        // dispatch(setStatusAddAC({status: "succeeded"}));
         dispatch(changeEntityStatusAc({todoListId: arg.todoListId, id: arg.id, status: "succeeded"}))
         return {todoListId: arg.todoListId, id: arg.id};
     } catch (e) {

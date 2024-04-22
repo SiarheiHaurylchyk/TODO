@@ -16,7 +16,8 @@ type initialStateType = {
     statusTask:RequestStatusType,
     statusAdd:RequestStatusType,
     error: null|string,
-    setInitiolized:boolean
+    setInitiolized:boolean,
+    search:string
 }
 
 const initialState:initialStateType = {
@@ -24,7 +25,8 @@ const initialState:initialStateType = {
     statusTask:"idle",
     statusAdd:"idle",
     error:null,
-    setInitiolized:false
+    setInitiolized:false,
+    search:""
 }
 
 const slice = createSlice({
@@ -43,7 +45,11 @@ const slice = createSlice({
         },
         setAppErrorAC(state, action:PayloadAction<{error: string|null}>){
             state.error=action.payload.error
+        },
+        getSearch(state,action:PayloadAction<{search:string}>){
+            state.search = action.payload.search;
         }
+
     },
     extraReducers:(builder)=>{
         builder
@@ -53,13 +59,39 @@ const slice = createSlice({
             .addCase(initializeAppTC.rejected,(state, action)=>{
                 state.setInitiolized=true
             })
+
+            .addMatcher(
+                (action)=>{
+                    return action.type.endsWith("/pending");
+                },
+                (state, action)=>{
+                    state.statusTask = "loading"
+                    state.statusAdd= "loading"
+            })
+            .addMatcher(
+                (action)=>{
+                    return action.type.endsWith("/fulfilled");
+                },
+                (state, action)=>{
+                    state.statusTask = "succeeded"
+                    state.statusAdd = "succeeded"
+                })
+            .addMatcher(
+                (action)=>{
+                    return action.type.endsWith("/rejected");
+                },
+                (state, action)=>{
+                    state.status = "idle"
+                    state.statusTask = "idle"
+                    state.statusAdd = "idle"
+                })
     }
 })
 
 export const AppSlice = slice.reducer;
 
 
-export const {setAppStatusAC,setStatusTaskAC,setStatusAddAC,setAppErrorAC} = slice.actions;
+export const {setAppStatusAC,setStatusTaskAC,setStatusAddAC,setAppErrorAC,getSearch} = slice.actions;
 
 
 export const initializeAppTC =  createAppAsyncThunk<{status:boolean}>(

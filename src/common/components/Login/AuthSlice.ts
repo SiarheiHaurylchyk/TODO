@@ -50,7 +50,6 @@ const loginTc = createAppAsyncThunk<{value:boolean},{data:LoginParamsType}>(
                     }
                     else {
                         errorFunctionMessage(res.data,dispatch)
-                        debugger
                         return rejectWithValue(null)
                     }
         }

@@ -7,6 +7,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import { useSearchParams } from "react-router-dom";
 import {FormControl} from "@mui/material";
 import {Event} from "@mui/icons-material";
+import {useDispatch} from "react-redux";
+import {getSearch} from "../../../../../App/AppSlice";
 
 const Search = styled('div')(({ theme }) => ({
 
@@ -57,20 +59,12 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export default function SearchAppBar() {
     const [searchParams, setSearchParams] = useSearchParams();
-    const [state,setState] = useState("")
+    const [search,setSearch] = useState("")
+    const dispatch = useDispatch();
 
-    useEffect(() => {
-        setSearchParams({})
-    }, []);
 
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement> )=>{
-
-            if(e.currentTarget.value){
-                setState(e.currentTarget.value)
-                setSearchParams({search:e.currentTarget.value})
-            }else {
-                setSearchParams({})
-            }
+       dispatch(getSearch({search:e.currentTarget.value}))
     }
 
     return (
